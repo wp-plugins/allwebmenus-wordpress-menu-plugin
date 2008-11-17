@@ -18,7 +18,7 @@ The **AllWebMenus WordPress Menu add-in & plugin** combination is designed to re
 
 **AllWebMenus** is a web menu builder that requires absolutely no DHTML or Javascript experience from you. It creates cross-browser navigation menus that work alike in all browsers supporting DHTML. A DHTML menu / JavaScript menu can be designed with a simple, tree-like approach. You can then fully customize it by applying a vast available number of features through the Properties Pane or by choosing a predefined appearance from the Theme Gallery. 
 
-For documentation, examples and screenshots, please refer to the official plugin page for [AllWebMenus WordPress Menu](http://www.likno.com/addins/wordpress-menu.html/ "AllWebMenus WordPress Menu").
+For documentation, examples and screenshots, please refer to the official plugin page for [AllWebMenus WordPress Menu](http://www.likno.com/addins/wordpress-menu.html "AllWebMenus WordPress Menu").
 
 
 * Major Features
@@ -49,13 +49,13 @@ For documentation, examples and screenshots, please refer to the official plugin
 	* Use several unfolding effects for the submenus
 	
 	...and many more!
-	For more detailed features list visit the [AllWebMenus PRO Features Page](http://www.likno.com/allwebmenusinfo.html/ "AllWebMenus PRO Features Page") in the Likno Web Site.
+	For more detailed features list visit the [AllWebMenus PRO Features Page](http://www.likno.com/allwebmenusinfo.html "AllWebMenus PRO Features Page") in the Likno Web Site.
 
 == Installation ==
 
 - Upload files to your `/wp-content/plugins/` directory (preserve sub-directory structure)
 - Activate the plugin through the 'Plugins' menu in WordPress
-- Refer to the [official plugin page](http://www.likno.com/addins/wordpress-menu.html/ "official plugin page") for documentation, usage and tips
+- Refer to the [official plugin page](http://www.likno.com/addins/wordpress-menu.html "official plugin page") for documentation, usage and tips
 
 
 
