@@ -62,7 +62,7 @@ For documentation, examples and screenshots, please refer to the official plugin
 == Required Software ==
 
 This plugin offers an integration for the AllWebMenus PRO software into a WordPress blog.
-As such, AllWebMenus PRO (v5.1.754 and above) is required to be installed in your machine.
+As such, **AllWebMenus PRO** (v5.1.754 and above) is required to be installed in your machine.
 
 == The "Yet Another Related Posts" Plugin ==
 
