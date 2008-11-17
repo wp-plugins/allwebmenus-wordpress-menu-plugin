@@ -59,6 +59,11 @@ For documentation, examples and screenshots, please refer to the official plugin
 
 
 
+== Required Software ==
+
+This plugin offers an integration for the AllWebMenus PRO software into a WordPress blog.
+As such, AllWebMenus PRO (v5.1.754 and above) is required to be installed in your machine.
+
 == The "Yet Another Related Posts" Plugin ==
 
 The AllWebMenus WordPress Menu Plugin offers the ability to add an item at the end of your menu that contains a submenu that displays the most relevant posts (or pages) of the post you are currently viewing (the item will appear only when you are viewing a single post).
