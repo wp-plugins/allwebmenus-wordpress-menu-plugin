@@ -3,7 +3,7 @@ Contributors: Likno Software
 Author: Likno Software
 Author URI: http://www.likno.com
 Plugin URI: http://www.likno.com/addins/wordpress-menu.html
-Tags: web menu, allwebmenus, drop down menu, javascript menu, 
+Tags: web menu, allwebmenus, drop down menu, javascript menu, dhtml menu, menu builder, navigation menu
 Stable Tag: 1.0.2
 Requires at least: 2.3
 Tested up to: 2.7
@@ -16,7 +16,7 @@ Required software: AllWebMenus PRO (version 5.1.754 and above)
 
 The **AllWebMenus WordPress Menu add-in & plugin** combination is designed to retrieve information from your blog (such as posts, pages, etc.) and import it into the AllWebMenus application to create stylish menus based on the structure of your blog!
 
-**AllWebMenus™** is a web menu builder that requires absolutely no DHTML or Javascript experience from you. It creates cross-browser navigation menus that work alike in all browsers supporting DHTML. A DHTML menu / JavaScript menu can be designed with a simple, tree-like approach. You can then fully customize it by applying a vast available number of features through the Properties Pane or by choosing a predefined appearance from the Theme Gallery. 
+**AllWebMenus** is a web menu builder that requires absolutely no DHTML or Javascript experience from you. It creates cross-browser navigation menus that work alike in all browsers supporting DHTML. A DHTML menu / JavaScript menu can be designed with a simple, tree-like approach. You can then fully customize it by applying a vast available number of features through the Properties Pane or by choosing a predefined appearance from the Theme Gallery. 
 
 For documentation, examples and screenshots, please refer to the official plugin page for [AllWebMenus WordPress Menu](http://www.likno.com/addins/wordpress-menu.html/ "AllWebMenus WordPress Menu").
 
@@ -26,7 +26,7 @@ For documentation, examples and screenshots, please refer to the official plugin
 	* Optimized menu building with separate javascripts for different browsers
 	* Full Search Engine Optimization (SEO) support
 	* Use your own HTML code on selected menu items to achieve enhanced formatting or advanced functionality
-	* “Auto Item Highlight”
+	* "Auto Item Highlight"
 	* Vertical Scrollbar for vertical Groups with "Automatic Scroll on Mouse Over"
 	* Multiple Rows and Columns on submenus
 	* Floating Images can be added to any of your menu items
