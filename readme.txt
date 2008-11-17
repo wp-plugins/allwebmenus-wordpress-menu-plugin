@@ -49,7 +49,7 @@ For documentation, examples and screenshots, please refer to the official plugin
 	* Use several unfolding effects for the submenus
 	
 	...and many more!
-	For more detailed features list visit the [AllWebMenus PRO Features Page](http://www.likno.com/allwebmenusinfo.html/ "AllWebMenus PRO Features Page") in the Likno Web Site
+	For more detailed features list visit the [AllWebMenus PRO Features Page](http://www.likno.com/allwebmenusinfo.html/ "AllWebMenus PRO Features Page") in the Likno Web Site.
 
 == Installation ==
 
