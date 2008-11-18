@@ -22,7 +22,7 @@ For documentation, examples and screenshots, please refer to the official plugin
 
 
 * Major Features
-	* Full cross-browser support (Internet Explorer - including v8 beta 2, all Mozilla based browsers (Firefox, etc), Opera, Safari, Google Chrome and many more)
+	* Full cross-browser support (Internet Explorer - including v8, all Mozilla based browsers (Firefox, etc), Opera, Safari, Google Chrome and many more)
 	* Optimized menu building with separate javascripts for different browsers
 	* Full Search Engine Optimization (SEO) support
 	* Use your own HTML code on selected menu items to achieve enhanced formatting or advanced functionality
