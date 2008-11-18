@@ -25,6 +25,7 @@ For documentation, examples and screenshots, please refer to the official plugin
 	* Full cross-browser support (Internet Explorer - including v8, all Mozilla based browsers (Firefox, etc), Opera, Safari, Google Chrome and many more)
 	* Optimized menu building with separate javascripts for different browsers
 	* Full Search Engine Optimization (SEO) support
+	* Edit CSS menu properties through a WYSIWYG interface
 	* Use your own HTML code on selected menu items to achieve enhanced formatting or advanced functionality
 	* "Auto Item Highlight"
 	* Vertical Scrollbar for vertical Groups with "Automatic Scroll on Mouse Over"
@@ -46,7 +47,9 @@ For documentation, examples and screenshots, please refer to the official plugin
 	* Use both vertical and horizontal submenus at any possible combination
 	* Use Header and Footer on the submenu groups and allow the user to drag the menu from its Header
 	* Use "Distances between menu items" and assign optional "Statusbar Text" for each item
+	* Use Custom Variables instead of actual text
 	* Use several unfolding effects for the submenus
+	* Add AJAX menu effects to your items
 	
 	...and many more!
 	For more detailed features list visit the [AllWebMenus PRO Features Page](http://www.likno.com/allwebmenusinfo.html "AllWebMenus PRO Features Page") in the Likno Web Site.
