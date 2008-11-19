@@ -115,38 +115,49 @@ function geturl($buildNo, $HashNo, $params)
 function AWM_check()
 {	
 	global $url;
-	/* get build number from menu file */
-	$menufile = fopen(dirname(__FILE__) .'/../../..'. get_option('AWM_menu_path') . get_option('AWM_menu_name'), 'r');
-	$mfile = fread($menufile, filesize(dirname(__FILE__) .'/../../..'. get_option('AWM_menu_path') . get_option('AWM_menu_name')));
-	$bNo = explode('awmLibraryBuild=', $mfile);
-	$bNo = explode(';', $bNo[1]);
-	$buildNo = $bNo[0];
-	$hNo = explode('awmHash=\'', $mfile);
-	$hNo = explode('\'', $hNo[1]);
-	$HashNo = $hNo[0];
-	
-	$params = "build=$buildNo&hash=$HashNo&rand=". rand(1,10000) ."&domain=". get_bloginfo('url');
+	try {
+		/* get build number from menu file */
+		$menufile = fopen(dirname(__FILE__) .'/../../..'. get_option('AWM_menu_path') . get_option('AWM_menu_name'), 'r');
+		$mfile = fread($menufile, filesize(dirname(__FILE__) .'/../../..'. get_option('AWM_menu_path') . get_option('AWM_menu_name')));
+		$bNo = explode('awmLibraryBuild=', $mfile);
+		$bNo = explode(';', $bNo[1]);
+		$buildNo = $bNo[0];
+		$hNo = explode('awmHash=\'', $mfile);
+		$hNo = explode('\'', $hNo[1]);
+		$HashNo = $hNo[0];
+		
+		$params = "build=$buildNo&hash=$HashNo&rand=". rand(1,10000) ."&domain=". get_bloginfo('url');
 
-	if (function_exists('curl_init')) {
+		if (function_exists('curl_init')) {
 
-		$awm_tmp = geturl($buildNo, $HashNo, $params);
-		if ($awm_tmp === '')
+			try {
+				$awm_tmp = geturl($buildNo, $HashNo, $params);
+				
+			} catch (Exception $e) {
+				return "Caught exception: ".  $e->getMessage(). " while retrieving version information. Please <a href='mailto:support@likno.com?subject=WordPress: Error while retrieving version info'>contact Likno</a> for more information.";
+			}
+			if ($awm_tmp === '')
+				$AWM_Text = '';
+				
+			else {
+				$AWM_Text = '<div name="antoyan" id="message1" class="updated fade"><table><tr><td><p><strong>';
+				$AWM_Text .= $awm_tmp;
+				$AWM_Text .= '</strong></p></td><td width="200px" align="center">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<input type="submit" name="AWM_hide_msg" value="Hide" /></td></tr></table></div>';
+			}
+				
+		} else {
+			
 			$AWM_Text = '';
 			
-		else {
-			$AWM_Text = '<div name="antoyan" id="message1" class="updated fade"><table><tr><td><p><strong>';
-			$AWM_Text .= $awm_tmp;
-			$AWM_Text .= '</strong></p></td><td width="200px" align="center">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<input type="submit" name="AWM_hide_msg" value="Hide" /></td></tr></table></div>';
 		}
-			
-	} else {
-		
-		$AWM_Text = '';
+	
+		update_option('AWM_Checked', TRUE);
+		update_option('AWM_Checked_Date', date(d));
 		
 	}
-	
-	update_option('AWM_Checked', TRUE);
-	update_option('AWM_Checked_Date', date(d));
+	catch (Exception $e) {
+		return "Caught exception: ".  $e->getMessage(). " while reading file ". dirname(__FILE__) .'/../../..'. get_option('AWM_menu_path') . get_option('AWM_menu_name');
+	}
 
 	return $AWM_Text;
 }	
