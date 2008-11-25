@@ -1042,7 +1042,7 @@ function AWM_create_menu() {
 
 	$plugin2_out = '';
 	
-	$plugin2_out .= '</textarea></p><div align="center"><p style="width:700px">- Press <strong>Ctrl+C</strong> to copy the above code<br>- Switch to the AllWebMenus desktop application<br>- Open the <i>"Add-ins -> WordPress Menu -> Import/Update Menu Structure from WordPress" form<br>- Paste the above copied "Menu Structure Code"</i><br>- Configure further your menu (styles, etc.) through the AllWebMenus properties
+	$plugin2_out .= '</textarea></p><div align="center"><p style="width:700px">- Press <strong>Ctrl+C</strong> to copy the above code<br>- Switch to the AllWebMenus desktop application<br>- Open the <i>"Add-ins -> WordPress Menu -> Import/Update Menu Structure from WordPress"</i> form<br>- Paste the above copied "Menu Structure Code"<br>- Configure further your menu (styles, etc.) through the AllWebMenus properties
 </p></div>';
 	
 	$plugin2_out .= "<script type='text/javascript'>var t=document.getElementById('loginfo');t.select();t.focus();</script>";
