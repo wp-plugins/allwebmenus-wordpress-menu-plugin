@@ -2,7 +2,7 @@
 
 /*
 Plugin Name: AllWebMenus-WordPress-Menu-Plugin
-Plugin URI: www.likno.com/addins/wordpress-menu.html
+Plugin URI: http://www.likno.com/addins/wordpress-menu.html
 Description: WordPress plugin for the AllWebMenus PRO DHTML Menu Maker - Create stylish menus
 Version: 1.0.2
 Author: Likno Software
