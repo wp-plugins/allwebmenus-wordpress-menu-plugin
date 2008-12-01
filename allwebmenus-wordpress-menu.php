@@ -357,13 +357,16 @@ function AWM_options_page() {
 
 	<?php
 	
-		/* Display a message in the Options page if the menu version is outdated */
+		/* Display a message in the Options page if the menu version is outdated
+		NOTE: we do not check date as we have to recheck to display the message to the admin */
 		if (get_option('AWM_Check_show')) {
 			
 			$AWM_buildText = AWM_check();
 
 			if ($AWM_buildText != '')
 				echo $AWM_buildText;
+			else 
+				update_option('AWM_Check_show', FALSE);
 		}
 
 	?>
