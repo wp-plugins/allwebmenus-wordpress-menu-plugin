@@ -3,11 +3,11 @@ Contributors: mitchoyoshitaka
 Author: mitcho (Michael Yoshitaka Erlewine)
 Author URI: http://mitcho.com/
 Plugin URI: http://mitcho.com/code/yarpp/
-Donate link: https://www.paypal.com/cgi-bin/webscr?cmd=_xclick&business=mitcho%40mitcho%2ecom&item_name=mitcho%2ecom%2fcode%3a%20donate%20to%20Michael%20Yoshitaka%20Erlewine&no_shipping=0&no_note=1&tax=0&currency_code=USD&lc=US&bn=PP%2dDonationsBF&charset=UTF%2d8
+Donate link: https://www.paypal.com/cgi-bin/webscr?cmd=_donations&business=66G4DATK4999L&item_name=mitcho%2ecom%2fcode%3a%20donate%20to%20Michael%20Yoshitaka%20Erlewine&no_shipping=0&no_note=1&tax=0&currency_code=USD&lc=US&charset=UTF%2d8
 Tags: related, posts, post, pages, page, RSS, feed, feeds
 Requires at least: 2.3
 Tested up to: 2.7
-Stable tag: 2.1.3
+Stable tag: 2.1.6
 
 Returns a list of the related entries based on a unique algorithm using titles, post bodies, tags, and categories. Now with RSS feed support!
 
@@ -55,7 +55,9 @@ The `related` functions can be used in conjunction to the regular "auto display"
 
 **Customizing the "related" functions**
 
-Since YARPP 2.1, you can specify some custom options for each instance of `related_*()`. The arguments are specified as a single array argument (`related_*(array(key=>value, key=>value, ...))`).
+Since YARPP 2.1, you can specify some custom options for each instance of `related_*()`. The functions take two arguments: 1. an array with key-value pairs of options, and 2. a boolean called `echo`, with default value of `true`. If `echo` is set to `false`, the result will simply be returned back instead of echoed. 
+
+For example: `related_*(array(key=>value, key=>value, ...),`(`true` or `false`)`)`.
 
 The available keys in version 2.1 are (roughly in the same order as in the options page):
 
@@ -73,18 +75,8 @@ The available keys in version 2.1 are (roughly in the same order as in the optio
 	* `cross_relate` => (`bool`) cross-relate posts and pages
 * Display options:
 	* `limit` => (`int`) maximum number of results
-	* `before_related` => before related entries text
-	* `after_related` => after related entries text
-	* `before_title` => before related entry title text
-	* `after_title` => after related entry title text
-	* `show_excerpt` => (`bool`) show excerpt
-	* `excerpt_length` => (`int`) the excerpt length
-	* `before_post` => before each related entry text
-	* `after_post` => after each related entry text
 	* `order` => MySQL `ORDER BY ` field and direction
-	* `no_results` => "no results" text
 	* `promote_yarpp` => (`bool`) promote YARPP?
-	* `show_score` => (`bool`) show the match score to admins
 
 **Examples**
 
@@ -140,9 +132,11 @@ Please submit such bugs by starting a new thread on [the Wordpress.org forums](h
 
 I highly recommend you disactivate YARPP, replace it with the new one, and then reactivate it.
 
-= Does YARPP come in different languages? =
+== Localizations ==
 
-YARPP has been [internationalized](http://codex.wordpress.org/Writing_a_Plugin#Internationalizing_Your_Plugin) as of version 2.1.1. No localizations have been made yet, but they are coming.
+YARPP is currently localized in the following languages:
+	* Simplified Chinese (`zh_CN`) by Jor Wang (mail at jorwang dot com) of [jorwang.com](http://jorwang.com)
+	* German (`de_DE`) by Michael Kalina (yarpp-de at mitcho dot com) of [3th.be](http://3th.be)
 
 If you are a bilingual speaker of English and another language and an avid user of YARPP, I would love to talk to you about localizing YARPP! Localizing YARPP can be pretty easy using [the Codestyling Localization plugin](http://www.code-styling.de/english/development/wordpress-plugin-codestyling-localization-en). Please [contact me](mailto:yarpp@mitcho.com) *first* before translating to make sure noone else is working on your language. Thanks!
 
@@ -212,13 +206,33 @@ If you are a bilingual speaker of English and another language and an avid user 
 * 2.1.3
 	* Bugfix: Turned off [the experimental caching](http://wordpress.org/support/topic/216194#post-894440) which shouldn't have been on in this release...
 	* Bugfix: an issue with the [keywords algorithm for non-ASCII characters](http://wordpress.org/support/topic/216078)
-	* Bugfix: [Option sumbmission took you to PayPal](http://wordpress.org/support/topic/214090)
+* 2.1.4
+	* Bugfix: [Settings' sumbmit button took you to PayPal](http://wordpress.org/support/topic/214090)
+	* Bugfix: Fixed [keyword algorithm for users without `mbstring`](http://wordpress.org/support/topic/216420)
+	* Bugfix: `title` attributes were not properly escaped
+	* Bugfix: [keywords did not filter tags](http://wordpress.org/support/topic/218211). (This bugfix may vastly improve "relatedness" on some blogs.)
+	* Localizations:
+		* Simplified Chinese (`zh_CN`) by Jor Wang (mail at jorwang dot com) of [jorwang.com](http://jorwang.com)
+		* German (`de_DE`) by Michael Kalina (yarpp-de at mitcho dot com) of [3th.be](http://3th.be)
+	* The "show excerpt" option now shows the first `n` words of the excerpt, rather than the content ([by request](http://wordpress.org/support/topic/212577))
+	* Added an `echo` parameter to the `related_*()` functions, with default value of `true`. If `false`, the function will simply return the output.
+	* Added support for the [AllWebMenus Pro](http://wordpress.org/extend/plugins/allwebmenus-wordpress-menu-plugin/) plugin
+	* Further internationalization: 
+		* the donate button! ^^
+		* overused words lists ([by request](http://wordpress.org/support/topic/159359))), with a German word list.
+* 2.1.5
+	* Bugfix: In certain scenarios, [related posts would be displayed in RSS feeds even when that option was off](http://wordpress.org/support/topic/216145)
+	* Bugfix: The `related_*()` functions were missing the `echo` parameter
+	* Some localization bugfixes
+	* Localizations:
+		* Japanese (`ja`) by myself ([mitcho (Michael Yoshitaka Erlewine)](http://mitcho.com))
+* 2.1.6
+	* Versioning bugfix - same as 2.1.5
 
 == Future versions ==
 
 The following feature requests have been made and may be incorporated into a future release. If you have a bug fix, please start a new thread on [the Wordpress.org forums](http://wordpress.org/tags/yet-another-related-posts-plugin).
 
-* User-defineable stopwords, especially to support other languages, [by request](http://wordpress.org/support/topic/159359)
-* Localization
-* Date and comment count in excerpt, [by request](http://wordpress.org/support/topic/156231)
+* More customizeable displays so that you can, for example, add the date and comment count in the excerpt ([by request](http://wordpress.org/support/topic/156231))
+* More localizations
 * Sentece-aware excerpts, [by request](http://wordpress.org/support/topic/162465)

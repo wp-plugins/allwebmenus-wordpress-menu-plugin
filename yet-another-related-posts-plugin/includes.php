@@ -2,6 +2,7 @@
 
 require_once('magic.php');
 require_once('keywords.php');
+require_once('intl.php');
 
 // here's a list of all the options YARPP uses (except version), as well as their default values, sans the yarpp_ prefix, split up into binary options and value options. These arrays are used in updating settings (options.php) and other tasks.
 $yarpp_value_options = array('threshold' => 5,
@@ -32,7 +33,6 @@ $yarpp_value_options = array('threshold' => 5,
 				'distags' => '',
 				'discats' => '');
 $yarpp_binary_options = array('past_only' => true,
-				'show_score' => true,
 				'show_excerpt' => false,
 				'rss_show_excerpt' => false,
 				'show_pass_post' => false,
@@ -84,8 +84,8 @@ function yarpp_activate() {
 			return 0;
 		}
 	}
-	add_option('yarpp_version','2.13');
-	update_option('yarpp_version','2.13');
+	add_option('yarpp_version','2.16');
+	update_option('yarpp_version','2.16');
 	return 1;
 }
 
@@ -138,8 +138,8 @@ function yarpp_upgrade_check($inuse = false) {
 		$wpdb->query("ALTER TABLE $wpdb->posts ADD FULLTEXT `yarpp_content` ( `post_content`)");		update_option('yarpp_version','2.03');
 	}
 
-	if (get_option('yarpp_version') < 2.13) {
-		update_option('yarpp_version','2.13');
+	if (get_option('yarpp_version') < 2.16) {
+		update_option('yarpp_version','2.16');
 	}
 
 	// just in case, try to add the index one more time.	
@@ -198,7 +198,7 @@ function yarpp_rss($content) {
 
 function yarpp_rss_excerpt($content) {
 	global $wpdb, $post;
-	if (yarpp_get_option('rss_excerpt_display'))
+	if (yarpp_get_option('rss_excerpt_display') and yarpp_get_option('rss_display'))
 		return $content.clean_pre(yarpp_related(array('post'),array(),false,'rss'));
 	else
 		return $content;
