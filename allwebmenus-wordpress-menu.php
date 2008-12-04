@@ -4,7 +4,7 @@
 Plugin Name: AllWebMenus-WordPress-Menu-Plugin
 Plugin URI: http://www.likno.com/addins/wordpress-menu.html
 Description: WordPress plugin for the AllWebMenus PRO DHTML Menu Maker - Create stylish menus
-Version: 1.0.2
+Version: 1.0.4
 Author: Likno Software
 */
 
@@ -23,7 +23,7 @@ Thus, the part of the code below that confirms that the menu is used only in one
 
 */
 
-$AWM_ver = '1.0.2';
+$AWM_ver = '1.0.4';
 
 /* 
  * Set up options if they do not exist
@@ -64,8 +64,7 @@ include ABSPATH . 'wp-content/plugins/allwebmenus-wordpress-menu-plugin/definiti
 
 if (in_array('yet-another-related-posts-plugin/yarpp.php', get_option('active_plugins'))) {
 	
-	/* to be changed in update of YARPP! */
-	update_option('AWM_Related', FALSE);
+	/* YARPP functions are already defined and ready to be used */
 
 } else {	
 	
@@ -77,9 +76,9 @@ if (in_array('yet-another-related-posts-plugin/yarpp.php', get_option('active_pl
 /* Update YARPP's auto_display option */
 if (get_option('AWM_Related'))
 	update_option('yarpp_auto_display', 0);
-else
-	if (in_array('yet-another-related-posts-plugin/yarpp.php', get_option('active_plugins')))
-		update_option('yarpp_auto_display', 1);
+//else
+//	if (in_array('yet-another-related-posts-plugin/yarpp.php', get_option('active_plugins')))
+//		update_option('yarpp_auto_display', 1);
 
 
 /* 
@@ -91,11 +90,11 @@ function AWM_add_option_pages() {
 	}
 }
 
-$url="http://www.likno.com/addins/wordpress-check.php";
+$url="http://www.likno.com/addins/plugin-check.php";
 $AWM_buildText = '';
 
 
-function geturl($buildNo, $HashNo, $params)
+function geturl($params)
 {
     global $url;
     $ch = curl_init();
@@ -126,12 +125,12 @@ function AWM_check()
 		$hNo = explode('\'', $hNo[1]);
 		$HashNo = $hNo[0];
 		
-		$params = "build=$buildNo&hash=$HashNo&rand=". rand(1,10000) ."&domain=". get_bloginfo('url');
+		$params = "plugin=wordpress&build=$buildNo&hash=$HashNo&rand=". rand(1,10000) ."&domain=". get_bloginfo('url');
 
 		if (function_exists('curl_init')) {
 
 			try {
-				$awm_tmp = geturl($buildNo, $HashNo, $params);
+				$awm_tmp = geturl($params);
 				
 			} catch (Exception $e) {
 				return "Caught exception: ".  $e->getMessage(). " while retrieving version information. Please <a href='mailto:support@likno.com?subject=WordPress: Error while retrieving version info'>contact Likno</a> for more information.";
@@ -148,6 +147,9 @@ function AWM_check()
 		} else {
 			
 			$AWM_Text = '';
+			$AWM_Text = '<div name="antoyan" id="message1" class="updated fade"><table><tr><td>';
+			$AWM_Text .= '<iframe src='. $url .'?'. $params .' width="600px" height="80px"></iframe>';
+			$AWM_Text .= '</td><td width="200px" align="center">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<input type="submit" name="AWM_hide_msg" value="Hide" /></td></tr></table></div>';
 			
 		}
 	
@@ -328,7 +330,11 @@ function AWM_options_page() {
 			update_option('AWM_Related', TRUE);
 
 		} else {
-			echo "YARPP NOT Activated!</strong> In order to be able to use the YARPP functionality as an item of your menu, you have to <strong>DEACTIVATE</strong> the YARP plugin from the <i>Plugins</i> panel and then <strong>ACTIVATE</strong> it from this page (the relevant button below).<strong>";
+
+			echo "YARPP Activated!";
+			update_option('AWM_YARPP', TRUE);
+			update_option('AWM_Related', TRUE);
+
 		}
 
 	    echo '</strong></p></div>';

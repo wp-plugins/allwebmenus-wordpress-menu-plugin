@@ -58,7 +58,7 @@ define('AWM_MENU_NAME', 'Name of menu:');
 define('AWM_YARP', '"Yet Another Related Posts Plugin" Options:');
 define('AWM_YARPDESC', 'Show "Related Posts" item when viewing a post:');
 define('AWM_YARPBGC', 'Background Color of the item that will contain the posts:');
-define('AWM_YARP_D', 'If you want to activate the YARP plugin from your Plugins panel (as a separate plutin) make sure that you DEACTIVATE the YARP plugin from here or you will get FATAL ERROR!');
+define('AWM_YARP_D', 'If you want to activate the YARP plugin from within the Plugins panel (as a separate plugin) make sure that you DEACTIVATE the YARP plugin first from this option or you will get a FATAL ERROR message! Then you can come back and reactivate it to use the YARP plugin either in your menu or in your posts.');
 define('AWM_YARP_A', 'If YARP plugin is already activated you cannot use the YARPP functionality in your menu! You need to DEACTIVATE YARPP from the Plugins panel and then ACTIVATE it by clicking on this button.');
 define('AWM_YARP_NA', '<i>You have deactivated the YARPP so you cannot select this option</i>');
 
