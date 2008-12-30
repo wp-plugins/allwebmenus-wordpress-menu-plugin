@@ -114,14 +114,18 @@ function geturl($params)
 function AWM_check()
 {	
 	global $url;
-	try {
+//	try { //try statement is supported from PHP5!
 		/* get build number from menu file */
-		$menufile = fopen(dirname(__FILE__) .'/../../..'. get_option('AWM_menu_path') . get_option('AWM_menu_name'), 'r');
-		$mfile = fread($menufile, filesize(dirname(__FILE__) .'/../../..'. get_option('AWM_menu_path') . get_option('AWM_menu_name')));
+		if (! ($menufile = fopen(dirname(__FILE__) .'/../../..'. get_option('AWM_menu_path') . get_option('AWM_menu_name'), 'r')))
+			return "Caught exception when opening file ". dirname(__FILE__) ."/../../..". get_option('AWM_menu_path') . get_option('AWM_menu_name');
+		if (! ($mfile = fread($menufile, filesize(dirname(__FILE__) .'/../../..'. get_option('AWM_menu_path') . get_option('AWM_menu_name')))))
+			return "Caught exception when reading file /../../..". get_option('AWM_menu_path') . get_option('AWM_menu_name');
 		$bNo = explode('awmLibraryBuild=', $mfile);
+		if ($bNo[1]==null) return "Caught exception when reading file ". dirname(__FILE__) ."/../../..". get_option('AWM_menu_path') . get_option('AWM_menu_name');
 		$bNo = explode(';', $bNo[1]);
 		$buildNo = $bNo[0];
 		$hNo = explode('awmHash=\'', $mfile);
+		if ($hNo[1]==null) return "Caught exception when reading file ". dirname(__FILE__) ."/../../..". get_option('AWM_menu_path') . get_option('AWM_menu_name');
 		$hNo = explode('\'', $hNo[1]);
 		$HashNo = $hNo[0];
 		
@@ -129,12 +133,13 @@ function AWM_check()
 
 		if (function_exists('curl_init')) {
 
-			try {
-				$awm_tmp = geturl($params);
+//			try {
+				if (! ($awm_tmp = geturl($params)))
+					return "Caught exception while retrieving version information. Please <a href='mailto:support@likno.com?subject=WordPress: Error while retrieving version info'>contact Likno</a> for more information.";
 				
-			} catch (Exception $e) {
-				return "Caught exception: ".  $e->getMessage(). " while retrieving version information. Please <a href='mailto:support@likno.com?subject=WordPress: Error while retrieving version info'>contact Likno</a> for more information.";
-			}
+//			} catch (Exception $e) {
+//				return "Caught exception: ".  $e->getMessage(). " while retrieving version information. Please <a href='mailto:support@likno.com?subject=WordPress: Error while retrieving version info'>contact Likno</a> for more information.";
+//			}
 			if ($awm_tmp === '')
 				$AWM_Text = '';
 				
@@ -156,10 +161,10 @@ function AWM_check()
 		update_option('AWM_Checked', TRUE);
 		update_option('AWM_Checked_Date', date(d));
 		
-	}
-	catch (Exception $e) {
-		return "Caught exception: ".  $e->getMessage(). " while reading file ". dirname(__FILE__) .'/../../..'. get_option('AWM_menu_path') . get_option('AWM_menu_name');
-	}
+//	}
+//	catch (Exception $e) {
+//		return "Caught exception: ".  $e->getMessage(). " while reading file ". dirname(__FILE__) .'/../../..'. get_option('AWM_menu_path') . get_option('AWM_menu_name');
+//	}
 
 	return $AWM_Text;
 }	
