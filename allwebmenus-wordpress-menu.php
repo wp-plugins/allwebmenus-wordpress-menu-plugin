@@ -4,7 +4,7 @@
 Plugin Name: AllWebMenus-WordPress-Menu-Plugin
 Plugin URI: http://www.likno.com/addins/wordpress-menu.html
 Description: WordPress plugin for the AllWebMenus PRO DHTML Menu Maker - Create stylish menus
-Version: 1.0.4
+Version: 1.0.4.b
 Author: Likno Software
 */
 
@@ -23,7 +23,7 @@ Thus, the part of the code below that confirms that the menu is used only in one
 
 */
 
-$AWM_ver = '1.0.4';
+$AWM_ver = '1.0.4.b';
 
 /* 
  * Set up options if they do not exist
