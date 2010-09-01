@@ -3,7 +3,7 @@
 Plugin Name: AllWebMenus WordPress Menu Plugin
 Plugin URI: http://www.likno.com/addins/wordpress-menu.html
 Description: WordPress plugin for the AllWebMenus PRO Javascript Menu Maker - Create stylish drop-down menus or sliding menus for your blogs!
-Version: 1.0.19
+Version: 1.0.20
 Author: Likno Software
 Author URI: http://www.likno.com/ 
 */
@@ -30,7 +30,7 @@ include_once ABSPATH . 'wp-content/plugins/allwebmenus-wordpress-menu-plugin/men
 include_once ABSPATH . 'wp-content/plugins/allwebmenus-wordpress-menu-plugin/include.php';
 
 
-$AWM_ver = '1.0.19';
+$AWM_ver = '1.0.20';
 $awm_total_tabs = 5;
 
 /* 
@@ -96,7 +96,7 @@ if ((get_option('AWM_Checked_Date') <= (date(d) - 15)) || (get_option('AWM_Check
  * Generate options page
  */
 function AWM_options_page() {
-	global $AWM_ver, $awm_total_tabs, $awm_is_yarpp_enabled;
+	global $AWM_ver, $awm_total_tabs, $awm_is_yarpp_enabled, $wpdb;
 ?>
 
 	<div style="max-width: 980px; margin-left: 15px;">
@@ -270,6 +270,10 @@ STR;
 	function awm_folder_info(x,t) {
 		document.getElementById('AWM_folder_info_'+t).style.display = x;
 	}
+	function awm_select_structure(x,t) {
+		document.getElementById("AWM_menu_structure_use_existing_"+t).style.display = x?"":"none";
+		document.getElementById("AWM_menu_structure_use_own_"+t).style.display = x?"none":"";
+	}
 	-->
 	</script>
 	
@@ -334,76 +338,107 @@ STR;
 				<br>
 				<fieldset class="options">
 					<div class="AWM_section">Menu Structure</div>
-					<p>Please select the items you want to include/exclude in your menu structure:</p>
-					<table width="100%" height="auto" style="padding-left: 40px;">
-						<tr><td colspan="2">&nbsp;</td></tr>
-						<tr><td width="230"><input name="AWM_include_home_<?php echo $awm_t;?>" type="checkbox" value="true" <?php if (get_option('AWM_include_home_'.$awm_t)) echo "checked='checked'"; ?> /> <strong>"Home"</strong></td>
-						<td class="awm_itemInfo">A "Home" item that opens the blog's Home Page.</td></tr>
-
-						<tr><td colspan="2">&nbsp;</td></tr>
-						<tr><td colspan="2">&nbsp;</td></tr>
-
-						<tr><td width="230"><input name="AWM_pages_<?php echo $awm_t;?>" type="checkbox" <?php if (get_option('AWM_pages_'.$awm_t)) echo "checked='checked'"; ?> /> <strong>Pages:</strong></td>
-						<td><span style="color: #009900">Show all Pages</span> <span style="color: #990000">except the following:</span></td></tr>
-						<tr><td width="230">&nbsp;&nbsp;</td>
-						<td><input name="AWM_excluded_pages_<?php echo $awm_t;?>" type="text" size="55" value="<?php echo get_option('AWM_excluded_pages_'.$awm_t) ?>"/></td></tr>
-						<tr><td width="230" align="right">&nbsp;</td>
-						<td class="awm_itemInfo">Page IDs, separated by commas (their sub-pages will also be excluded). Example: 34, 59, 140</td></tr>
-						<tr><td colspan="2">&nbsp;</td></tr>
-						<tr><td width="230">&nbsp;&nbsp;</td>
-						<td><input name="AWM_pages_ms_<?php echo $awm_t;?>" value="main" type="radio" <?php if (get_option('AWM_pages_ms_'.$awm_t) == 'main') echo "checked='checked'"; ?> />&nbsp;Show Pages as Main Menu items</td></tr>
-						<tr><td width="230">&nbsp;&nbsp;</td>
-						<td><input name="AWM_pages_ms_<?php echo $awm_t;?>" value="sub" type="radio"<?php if (get_option('AWM_pages_ms_'.$awm_t) == 'sub') echo "checked='checked'"; ?> />&nbsp;Show a Main Menu item named <input name="AWM_pages_name_<?php echo $awm_t;?>" type="text" size="10" value="<?php echo get_option('AWM_pages_name_'.$awm_t) ?>"/>
-						and show Pages as its submenu items</td></tr>
-						
-						<tr><td colspan="2">&nbsp;</td></tr>
-						<tr><td colspan="2">&nbsp;</td></tr>
-						
-						<tr><td width="230"><input name="AWM_posts_<?php echo $awm_t;?>" type="checkbox" <?php if (get_option('AWM_posts_'.$awm_t)) echo "checked='checked'"; ?> /> <strong>Posts:</strong></td>
-						<td><span style="color: #009900">Show the following Posts:</span></i></td></tr>
-						<tr><td width="230">&nbsp;&nbsp;</td>
-						<td><input name="AWM_posts_ids_<?php echo $awm_t;?>" type="text" size="55" value="<?php echo get_option('AWM_posts_ids_'.$awm_t) ?>"/></td></tr>
-						<tr><td width="230" align="right">&nbsp;</td>
-						<td class="awm_itemInfo">Post IDs, separated by commas. Example: 34, 59, 140</td></tr>
-						<tr><td colspan="2">&nbsp;</td></tr>
-						<tr><td width="230">&nbsp;&nbsp;</td>
-						<td><input name="AWM_posts_ms_<?php echo $awm_t;?>" value="main" type="radio" <?php if (get_option('AWM_posts_ms_'.$awm_t) == 'main') echo "checked='checked'"; ?> />&nbsp;Show Posts as Main Menu items</td></tr>
-						<tr><td width="230">&nbsp;&nbsp;</td>
-						<td><input name="AWM_posts_ms_<?php echo $awm_t;?>" value="sub" type="radio"<?php if (get_option('AWM_posts_ms_'.$awm_t) == 'sub') echo "checked='checked'"; ?> />&nbsp;Show a Main Menu item named <input name="AWM_posts_name_<?php echo $awm_t;?>" type="text" size="10" value="<?php echo get_option('AWM_posts_name_'.$awm_t) ?>"/>
-						and show Posts as its submenu items</td></tr>
-						
-						<tr><td colspan="2">&nbsp;</td></tr>
-						<tr><td colspan="2">&nbsp;</td></tr>
-						
-						<tr><td width="230"><input name="AWM_categories_<?php echo $awm_t;?>" type="checkbox" <?php if (get_option('AWM_categories_'.$awm_t)) echo "checked='checked'"; ?> /> <strong>Categories:</strong></td>
-						<td><span style="color: #009900">Show all Categories</span> <span style="color: #990000">except the following:</span></td></tr>
-						<tr><td width="230">&nbsp;&nbsp;</td>
-						<td><input name="AWM_excluded_cats_<?php echo $awm_t;?>" type="text" size="55" value="<?php echo get_option('AWM_excluded_cats_'.$awm_t) ?>"/></td></tr>
-						<tr><td width="230" align="right">&nbsp;</td>
-						<td class="awm_itemInfo">Category IDs, separated by commas (their sub-categories will also be excluded). Example: 34, 59, 140</td></tr>
-						<tr><td width="230">&nbsp;&nbsp;</td>
-						<td><input name="AWM_categories_subitems_<?php echo $awm_t;?>" type="checkbox" <?php if (get_option('AWM_categories_subitems_'.$awm_t)) echo "checked='checked'"; ?> /> Also show (up to) the <input name="AWM_categories_subitems_no_<?php echo $awm_t;?>" type="text" size="2" value="<?php echo get_option('AWM_categories_subitems_no_'.$awm_t) ?>"/> newest posts of each Category as its submenu items</td></tr>
-						<tr><td width="230">&nbsp;&nbsp;</td>
-						<td class="awm_itemInfo">Value must be between 1 and 50.</td></tr>
-						<tr><td colspan="2">&nbsp;</td></tr>
-						<tr><td width="230">&nbsp;&nbsp;</td>
-						<td><input name="AWM_categories_ms_<?php echo $awm_t;?>" value="main" type="radio" <?php if (get_option('AWM_categories_ms_'.$awm_t) == 'main') echo "checked='checked'"; ?> />&nbsp;Show Categories as Main Menu items</td></tr>
-						<tr><td width="230">&nbsp;&nbsp;</td>
-						<td><input name="AWM_categories_ms_<?php echo $awm_t;?>" value="sub" type="radio" <?php if (get_option('AWM_categories_ms_'.$awm_t) == 'sub') echo "checked='checked'"; ?> />&nbsp;Show a Main Menu item named <input name="AWM_categories_name_<?php echo $awm_t;?>" type="text" size="10" value="<?php echo get_option('AWM_categories_name_'.$awm_t) ?>"/>
-						and show Categories as its submenu items</td></tr>
-						
-						<tr><td colspan="2">&nbsp;</td></tr>
-						<tr><td colspan="2">&nbsp;</td></tr>
-						
-						<tr><td width="230"><span style="margin-left: 20px;"><strong>Other:</strong></span></td><td>
-							<input type="checkbox" name="AWM_hide_future_<?php echo $awm_t;?>" value="checkbox" <?php if (get_option('AWM_hide_future_'.$awm_t)) echo "checked='checked'"; ?>/> Hide future-dated posts
-							&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<input type="checkbox" name="AWM_hide_protected_<?php echo $awm_t;?>" value="checkbox" <?php if (get_option('AWM_hide_protected_'.$awm_t)) echo "checked='checked'"; ?>/> Hide password-protected items
+					<table width="100%" height="auto" style="padding-left: 20px;">
+						<tr><td>&nbsp;</td></tr>
+						<tr><td><input onclick="awm_select_structure(true,<?php echo $awm_t;?>);" name="AWM_use_custom_menu_<?php echo $awm_t;?>" value="1" type="radio" <?php if (get_option('AWM_use_custom_menu_'.$awm_t)) echo "checked='checked'"; ?> />&nbsp;Get menu structure from an existing WordPress menu (WordPress 3+)</td></tr>
+						<tr><td id="AWM_menu_structure_use_existing_<?php echo $awm_t;?>">
+							<table width="100%" height="auto" style="padding-left: 20px;">
+								<tr><td>
+									Which WordPress menu do you want to use? <select id="AWM_use_custom_menu_id_<?php echo $awm_t;?>" name="AWM_use_custom_menu_id_<?php echo $awm_t;?>">
+<?php
+		$awm_available_custom_menus = (array)$wpdb->get_results("
+			SELECT t.term_id as menu_ID, t.name as menu_name
+			FROM {$wpdb->prefix}terms t, {$wpdb->prefix}term_taxonomy tt
+			WHERE tt.taxonomy = 'nav_menu'
+			AND t.term_id = tt.term_id
+			ORDER BY menu_ID");
+		if (count($awm_available_custom_menus)>0) {
+//			echo "<option value='-1'>Please select a WordPress menu</option>";
+			for ($awm_i=0; $awm_i<count($awm_available_custom_menus); $awm_i++) {
+				echo "<option value='".$awm_available_custom_menus[$awm_i]->menu_ID."'".($awm_available_custom_menus[$awm_i]->menu_ID==get_option('AWM_use_custom_menu_id_'.$awm_t)?" selected":"").">".$awm_available_custom_menus[$awm_i]->menu_name."</option>";
+			}
+		} else {
+			echo "<option value='-1'>No WordPress menus found!</option>";
+		}
+?>
+									</select>&nbsp;&nbsp;&nbsp;&nbsp;<span class="awm_itemInfo"><a href="http://www.likno.com/blog/wp-admin/nav-menus.php">Add/Edit WordPress menus</a></span
+								</td></tr>
+							</table>
 						</td></tr>
-						
-						<tr><td colspan="2">&nbsp;</td></tr>
-						<tr><td colspan="2">&nbsp;</td></tr>
+						<tr><td>&nbsp;</td></tr>
+						<tr><td><input onclick="awm_select_structure(false,<?php echo $awm_t;?>);" name="AWM_use_custom_menu_<?php echo $awm_t;?>" value="0" type="radio"<?php if (!get_option('AWM_use_custom_menu_'.$awm_t)) echo "checked='checked'"; ?> />&nbsp;Specify menu structure here</td></tr>
+						<tr><td id="AWM_menu_structure_use_own_<?php echo $awm_t;?>">
+							<table width="100%" height="auto" style="padding-left: 20px;">
+								<tr><td colspan="2"><p>Please select the items you want to include/exclude in your menu structure:</p></td></tr>
+								<tr><td colspan="2">&nbsp;</td></tr>
+								<tr><td width="230"><input name="AWM_include_home_<?php echo $awm_t;?>" type="checkbox" value="true" <?php if (get_option('AWM_include_home_'.$awm_t)) echo "checked='checked'"; ?> /> <strong>"Home"</strong></td>
+								<td class="awm_itemInfo">A "Home" item that opens the blog's Home Page.</td></tr>
+
+								<tr><td colspan="2">&nbsp;</td></tr>
+								<tr><td colspan="2">&nbsp;</td></tr>
+
+								<tr><td width="230"><input name="AWM_pages_<?php echo $awm_t;?>" type="checkbox" <?php if (get_option('AWM_pages_'.$awm_t)) echo "checked='checked'"; ?> /> <strong>Pages:</strong></td>
+								<td><span style="color: #009900">Show all Pages</span> <span style="color: #990000">except the following:</span></td></tr>
+								<tr><td width="230">&nbsp;&nbsp;</td>
+								<td><input name="AWM_excluded_pages_<?php echo $awm_t;?>" type="text" size="55" value="<?php echo get_option('AWM_excluded_pages_'.$awm_t) ?>"/></td></tr>
+								<tr><td width="230" align="right">&nbsp;</td>
+								<td class="awm_itemInfo">Page IDs, separated by commas (their sub-pages will also be excluded). Example: 34, 59, 140</td></tr>
+								<tr><td colspan="2">&nbsp;</td></tr>
+								<tr><td width="230">&nbsp;&nbsp;</td>
+								<td><input name="AWM_pages_ms_<?php echo $awm_t;?>" value="main" type="radio" <?php if (get_option('AWM_pages_ms_'.$awm_t) == 'main') echo "checked='checked'"; ?> />&nbsp;Show Pages as Main Menu items</td></tr>
+								<tr><td width="230">&nbsp;&nbsp;</td>
+								<td><input name="AWM_pages_ms_<?php echo $awm_t;?>" value="sub" type="radio"<?php if (get_option('AWM_pages_ms_'.$awm_t) != 'main') echo "checked='checked'"; ?> />&nbsp;Show a Main Menu item named <input name="AWM_pages_name_<?php echo $awm_t;?>" type="text" size="10" value="<?php echo get_option('AWM_pages_name_'.$awm_t) ?>"/>
+								and show Pages as its submenu items</td></tr>
+								
+								<tr><td colspan="2">&nbsp;</td></tr>
+								<tr><td colspan="2">&nbsp;</td></tr>
+								
+								<tr><td width="230"><input name="AWM_posts_<?php echo $awm_t;?>" type="checkbox" <?php if (get_option('AWM_posts_'.$awm_t)) echo "checked='checked'"; ?> /> <strong>Posts:</strong></td>
+								<td><span style="color: #009900">Show the following Posts:</span></i></td></tr>
+								<tr><td width="230">&nbsp;&nbsp;</td>
+								<td><input name="AWM_posts_ids_<?php echo $awm_t;?>" type="text" size="55" value="<?php echo get_option('AWM_posts_ids_'.$awm_t) ?>"/></td></tr>
+								<tr><td width="230" align="right">&nbsp;</td>
+								<td class="awm_itemInfo">Post IDs, separated by commas. Example: 34, 59, 140</td></tr>
+								<tr><td colspan="2">&nbsp;</td></tr>
+								<tr><td width="230">&nbsp;&nbsp;</td>
+								<td><input name="AWM_posts_ms_<?php echo $awm_t;?>" value="main" type="radio" <?php if (get_option('AWM_posts_ms_'.$awm_t) == 'main') echo "checked='checked'"; ?> />&nbsp;Show Posts as Main Menu items</td></tr>
+								<tr><td width="230">&nbsp;&nbsp;</td>
+								<td><input name="AWM_posts_ms_<?php echo $awm_t;?>" value="sub" type="radio"<?php if (get_option('AWM_posts_ms_'.$awm_t) != 'main') echo "checked='checked'"; ?> />&nbsp;Show a Main Menu item named <input name="AWM_posts_name_<?php echo $awm_t;?>" type="text" size="10" value="<?php echo get_option('AWM_posts_name_'.$awm_t) ?>"/>
+								and show Posts as its submenu items</td></tr>
+								
+								<tr><td colspan="2">&nbsp;</td></tr>
+								<tr><td colspan="2">&nbsp;</td></tr>
+								
+								<tr><td width="230"><input name="AWM_categories_<?php echo $awm_t;?>" type="checkbox" <?php if (get_option('AWM_categories_'.$awm_t)) echo "checked='checked'"; ?> /> <strong>Categories:</strong></td>
+								<td><span style="color: #009900">Show all Categories</span> <span style="color: #990000">except the following:</span></td></tr>
+								<tr><td width="230">&nbsp;&nbsp;</td>
+								<td><input name="AWM_excluded_cats_<?php echo $awm_t;?>" type="text" size="55" value="<?php echo get_option('AWM_excluded_cats_'.$awm_t) ?>"/></td></tr>
+								<tr><td width="230" align="right">&nbsp;</td>
+								<td class="awm_itemInfo">Category IDs, separated by commas (their sub-categories will also be excluded). Example: 34, 59, 140</td></tr>
+								<tr><td width="230">&nbsp;&nbsp;</td>
+								<td><input name="AWM_categories_subitems_<?php echo $awm_t;?>" type="checkbox" <?php if (get_option('AWM_categories_subitems_'.$awm_t)) echo "checked='checked'"; ?> /> Also show (up to) the <input name="AWM_categories_subitems_no_<?php echo $awm_t;?>" type="text" size="2" value="<?php echo get_option('AWM_categories_subitems_no_'.$awm_t) ?>"/> newest posts of each Category as its submenu items</td></tr>
+								<tr><td width="230">&nbsp;&nbsp;</td>
+								<td class="awm_itemInfo">Value must be between 1 and 50.</td></tr>
+								<tr><td colspan="2">&nbsp;</td></tr>
+								<tr><td width="230">&nbsp;&nbsp;</td>
+								<td><input name="AWM_categories_ms_<?php echo $awm_t;?>" value="main" type="radio" <?php if (get_option('AWM_categories_ms_'.$awm_t) == 'main') echo "checked='checked'"; ?> />&nbsp;Show Categories as Main Menu items</td></tr>
+								<tr><td width="230">&nbsp;&nbsp;</td>
+								<td><input name="AWM_categories_ms_<?php echo $awm_t;?>" value="sub" type="radio" <?php if (get_option('AWM_categories_ms_'.$awm_t) != 'main') echo "checked='checked'"; ?> />&nbsp;Show a Main Menu item named <input name="AWM_categories_name_<?php echo $awm_t;?>" type="text" size="10" value="<?php echo get_option('AWM_categories_name_'.$awm_t) ?>"/>
+								and show Categories as its submenu items</td></tr>
+								
+								<tr><td colspan="2">&nbsp;</td></tr>
+								<tr><td colspan="2">&nbsp;</td></tr>
+								
+								<tr><td width="230"><span style="margin-left: 20px;"><strong>Other:</strong></span></td><td>
+									<input type="checkbox" name="AWM_hide_future_<?php echo $awm_t;?>" value="checkbox" <?php if (get_option('AWM_hide_future_'.$awm_t)) echo "checked='checked'"; ?>/> Hide future-dated posts
+									&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<input type="checkbox" name="AWM_hide_protected_<?php echo $awm_t;?>" value="checkbox" <?php if (get_option('AWM_hide_protected_'.$awm_t)) echo "checked='checked'"; ?>/> Hide password-protected items
+								</td></tr>
+								
+							</table>
+						</td></tr>
+						<tr><td>&nbsp;</td></tr>
+						<tr><td>&nbsp;</td></tr>
 					</table>
-					
 					<div class="AWM_section">Menu Type</div>
 					<p>Please select how you want your menu to behave:</p>
 					<input type="hidden" id="awm_initial_menu_type_<?php echo $awm_t;?>" value="<?php echo get_option('AWM_menu_type_'.$awm_t);?>"/>
@@ -474,6 +509,7 @@ STR;
 					</table>
 				</fieldset>
 			</div>
+			<script>awm_select_structure(<?php echo get_option('AWM_use_custom_menu_'.$awm_t)?"true":"false";?>,<?php echo $awm_t;?>);</script>
 <?php
 	}	// end of tab body for loop
 ?>
@@ -524,8 +560,8 @@ function AWM_generate_linking_code() {
 		}
 		$awm_parentgroup = "wpgroup";
 		
-		// only if we are viewing a single post
-		if ($awm_is_yarpp_enabled && get_option('AWM_Related_'.$awm_t) && is_single()) {
+		// only if we are viewing a single post & want related (and not custom menu)
+		if ($awm_is_yarpp_enabled && get_option('AWM_Related_'.$awm_t) && is_single() && !get_option('AWM_use_custom_menu_'.$awm_t)) {
 			// convert quotes to add code to item's <Text> property
 			$awm_related = related_posts('', false);
 			$awm_related = str_replace('"', "'", $awm_related);
