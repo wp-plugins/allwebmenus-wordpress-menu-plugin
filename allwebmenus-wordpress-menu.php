@@ -344,7 +344,7 @@ STR;
 					<div class="AWM_section">Menu Structure</div>
 					<table width="100%" height="auto" style="padding-left: 20px;">
 						<tr><td>&nbsp;</td></tr>
-						<tr><td><input onclick="awm_select_structure(true,<?php echo $awm_t;?>);" name="AWM_use_custom_menu_<?php echo $awm_t;?>" value="1" type="radio" <?php if (get_option('AWM_use_custom_menu_'.$awm_t)) echo "checked='checked'"; ?> />&nbsp;Get menu structure from an existing WordPress menu (WordPress 3+)</td></tr>
+						<tr><td><input onclick="awm_select_structure(true,<?php echo $awm_t;?>);" name="AWM_use_custom_menu_<?php echo $awm_t;?>" value="1" type="radio" <?php if (get_option('AWM_use_custom_menu_'.$awm_t)) echo "checked='checked'"; ?> />&nbsp;Menu is populated from an existing "Wordpress menu" (check to choose menu, Wordpress 3+ only)</td></tr>
 						<tr><td id="AWM_menu_structure_use_existing_<?php echo $awm_t;?>">
 							<table width="100%" height="auto" style="padding-left: 20px;">
 								<tr><td>
@@ -370,7 +370,7 @@ STR;
 							</table>
 						</td></tr>
 						<tr><td>&nbsp;</td></tr>
-						<tr><td><input onclick="awm_select_structure(false,<?php echo $awm_t;?>);" name="AWM_use_custom_menu_<?php echo $awm_t;?>" value="0" type="radio"<?php if (!get_option('AWM_use_custom_menu_'.$awm_t)) echo "checked='checked'"; ?> />&nbsp;Specify menu structure here</td></tr>
+						<tr><td><input onclick="awm_select_structure(false,<?php echo $awm_t;?>);" name="AWM_use_custom_menu_<?php echo $awm_t;?>" value="0" type="radio"<?php if (!get_option('AWM_use_custom_menu_'.$awm_t)) echo "checked='checked'"; ?> />&nbsp;Menu is populated with specific "pages", "posts", "categories", etc. (check to choose items)</td></tr>
 						<tr><td id="AWM_menu_structure_use_own_<?php echo $awm_t;?>">
 							<table width="100%" height="auto" style="padding-left: 20px;">
 								<tr><td colspan="2"><p>Please select the items you want to include/exclude in your menu structure:</p></td></tr>
