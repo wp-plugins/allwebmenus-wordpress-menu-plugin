@@ -2,7 +2,7 @@
 Plugin Name: AllWebMenus WordPress Menu Plugin
 Plugin URI: http://www.likno.com/addins/wordpress-menu.html
 Description: WordPress plugin for the AllWebMenus PRO Javascript Menu Maker - Create stylish drop-down menus or sliding menus for your blogs!
-Version: 1.1.2
+Version: 1.1.3
 Author: Likno Software
 Author URI: http://www.likno.com/ 
 */
@@ -27,6 +27,17 @@ Thus, the part of the code below that confirms that the menu is used only in one
 
 
  var AWM_TOTAL_TABS_JS;
+
+ if(!Array.indexOf){
+  Array.prototype.indexOf = function(obj){
+   for(var i=0; i<this.length; i++){
+    if(this[i]==obj){
+     return i;
+    }
+   }
+   return -1;
+  }
+}
 	function awm_show_tab(x) {
                 var i;
 		for (i=0; i<AWM_TOTAL_TABS_JS; i++) {

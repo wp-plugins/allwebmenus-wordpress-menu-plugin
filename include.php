@@ -4,7 +4,10 @@ function awm_add_code(){
     if (!defined ('TEMPLATEPATH') || !defined('STYLESHEETPATH') )
         wp_templating_constants();
         $file_path = locate_template(array("header.php"));
-      $file = file_get_contents( $file_path );
+        if (!empty($file_path))
+            $file = @file_get_contents( $file_path );
+        else
+            return false;
       //checking if htmp.tpl.php is writable
    $wantedPerms = 0755;
   $actualPerms = fileperms($file_path);
@@ -15,6 +18,8 @@ function awm_add_code(){
       }
        if (substr_count($file,'AWM_generate_linking_code')==0)
        {
+           
+       
        preg_match ( "/<body([^\?>])*(<\?([^>])*\?>([^>\?])*)*>/", $file, $matches );
         if (count($matches)>0){
 
@@ -170,9 +175,14 @@ function awm_convert_from_single_to_multi_tab() {
 
 
     dbDelta($sql);
+  
+    if ($wpdb->get_var("SHOW TABLES LIKE '$awm_table_name'") != $awm_table_name){
+            return "Could not create table. Please check your privileges";}
 
-    if ( $awm_total_tabs == 0)
+    if ( $awm_total_tabs == 0){
         awm_create_new_menu(true);
+        update_option('AWM_selected_tab', 0);
+        }
     }   
 	for ($awm_t=0; $awm_t<$awm_total_tabs; $awm_t++) {
 
@@ -254,6 +264,7 @@ $awm_total_tabs = $wpdb->get_var($wpdb->prepare("SELECT COUNT(*) FROM $awm_table
 
 
  }
+ return "";
  }
 
  /* This code creates new menu */
@@ -515,8 +526,6 @@ function awm_delete_widget_instance($awm_t, $isId = false){
 /* The function that uploads the zip file */
 function awm_update_zip() {
     global $awm_table_name,$wpdb;
-
-$zip_mime = array("application/zip", "application/x-zip", "application/x-zip-compressed", "application/octet-stream", "application/x-compress", "application/x-compressed", "multipart/x-zip");
     global $awm_total_tabs;
 
  update_option('AWM_selected_tab', (string) $_POST["AWM_selected_tab_c"]);
@@ -529,9 +538,6 @@ $zip_mime = array("application/zip", "application/x-zip", "application/x-zip-com
        
        if ($src['name'] != "awm".($or_name =$wpdb->get_var("SELECT name from $awm_table_name where id = ".(int) $_POST["AWM_menu_id"]).'.zip'))
            return "Error: Wrong filename (".$src['name']."). It should be: 'awm".$or_name."'.";
-      
-       if (!in_array($src['type'] ,$zip_mime) )
-           return "Error: Wrong file type (".$src['type']."). It should be a ZIP file.";
        
        if (file_exists (ABSPATH.$folder.$src['name']))
            unlink ( ABSPATH.$folder.$src['name'] );

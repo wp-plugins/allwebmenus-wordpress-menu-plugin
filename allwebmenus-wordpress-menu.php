@@ -3,7 +3,7 @@
 Plugin Name: AllWebMenus WordPress Menu Plugin
 Plugin URI: http://www.likno.com/addins/wordpress-menu.html
 Description: WordPress plugin for the AllWebMenus PRO Javascript Menu Maker - Create stylish drop-down menus or sliding menus for your blogs!
-Version: 1.1.2
+Version: 1.1.3
 Author: Likno Software
 Author URI: http://www.likno.com/ 
 */
@@ -36,7 +36,7 @@ $awmPluginInstance = new AWM_Plugin();
 class AWM_Plugin
 {
 
-    var $optionsMessage,$AWM_ver , $awm_total_tabs, $awm_is_yarpp_enabled, $wpdb, $dataArray,$awm_table_name,$awm_wp_nav_array;
+    var $optionsMessage, $databaseMessage, $AWM_ver , $awm_total_tabs, $awm_is_yarpp_enabled, $wpdb, $dataArray,$awm_table_name,$awm_wp_nav_array;
    
     function AWM_Plugin(){
     global $wpdb;
@@ -65,7 +65,7 @@ class AWM_Plugin
     
     $this->awm_table_name = $awm_table_name = $this->wpdb->prefix . "awm";
     $this->dataArray = $dataArray = array();
-    $this->AWM_ver = $AWM_ver = '1.1.2';
+    $this->AWM_ver = $AWM_ver = '1.1.3';
 
     $this->awm_total_tabs = $awm_total_tabs = get_option("AWM_total_menus",(int) 0);
 //if ($_POST["AWM_selected_tab"]=="") $_POST["AWM_selected_tab"]="1";
@@ -73,13 +73,30 @@ class AWM_Plugin
     awm_set_first_time_options();
 
 // add linking code to header.php file
-    if (!awm_add_code()){
+    if (isset($_GET['theaction']) && $_GET['theaction']=='show_addcode') {
+
+                update_option("AWM_code_check", 1);
+	}
+    $check = get_option("AWM_code_check",1);
+    if ($check && !awm_add_code()){
         $this->optionsMessage =
-        "<div class=\"updated fade\" style=\"margin-top: 20px;\"><p><strong>Linking code could not be added automatically. You have to add it by yourself. Open the \"header.php\" file (found at \"SITEROOT/wp-content/themes/YourSiteTheme\") and add this code <br /><textarea readonly cols=50 rows=4><?php if (function_exists('AWM_generate_linking_code'))\nAWM_generate_linking_code(); ?></textarea><br /> right after the &lt;body&gt; tag.</strong></p></div>";
+        "<div class=\"updated fade\" style=\"margin-top: 20px;\"><p><strong>Linking code could not be added automatically. You have to add it by yourself. Open the \"header.php\" file (found at \"SITEROOT/wp-content/themes/YourSiteTheme\") and add this code <br /><textarea readonly cols=50 rows=4><?php if (function_exists('AWM_generate_linking_code'))\nAWM_generate_linking_code(); ?></textarea><br /> right after the &lt;body&gt; tag.</strong></p>
+        <form method=\"post\" id=\"the_add_code_form\" name=\"the_add_code_form\" action=\"".plugins_url('actions.php',__FILE__)."\">
+                                <input type=\"hidden\" name=\"theaction\" value=\"hide_addcode\"/>
+                                <input type=\"hidden\" name=\"ref\" value=\" ". admin_url("options-general.php?page=allwebmenus-wordpress-menu-plugin/allwebmenus-wordpress-menu.php") ."\"/>
+                                <input type=\"hidden\" name=\"abspath\" value=\"".urlencode(ABSPATH)."\"/>
+                                <input type=\"submit\"  value=\"Hide notification\"/>
+                                </form>
+    </div>
+                    		
+";
     }
 // Check if already had the plugin when it was single-tab and convert values
     awm_convert_from_single_to_multi_tab();
-    awm_convert_to_database();
+    $this->databaseMessage  = awm_convert_to_database();
+        if (!empty($this->databaseMessage))
+                $this->databaseMessage = "<div class=\"updated fade\" style=\"margin-top: 20px;\"><strong>".$this->databaseMessage."</strong></div>";
+
     $this->awm_total_tabs = $awm_total_tabs;
     $this->awm_is_yarpp_enabled = $awm_is_yarpp_enabled = in_array('yet-another-related-posts-plugin/yarpp.php', get_option('active_plugins'));
     $awm_plugin = plugin_basename(__FILE__);
@@ -98,7 +115,12 @@ if ((get_option('AWM_Checked_Date') <= (date('d') - 15)) || (get_option('AWM_Che
 function awm_wp_settings_link($awm_links) {
 	$awm_settings_link = '<a href="options-general.php?page=allwebmenus-wordpress-menu-plugin/allwebmenus-wordpress-menu.php">Settings</a>';
 	array_unshift($awm_links, $awm_settings_link);
-	return $awm_links;
+        $check = get_option("AWM_code_check",1);
+	if (!$check){
+            $awm_linking_link2 ='<a href="'.admin_url("options-general.php?page=allwebmenus-wordpress-menu-plugin/allwebmenus-wordpress-menu.php&theaction=show_addcode").'">Activate linking code check</a>';
+             $awm_links[] = $awm_linking_link2;
+        }
+            return $awm_links;
 }
 /*
  * Initialization of the admin panel.
@@ -138,7 +160,8 @@ function AWM_add_option_pages() {
  * Generate options page
  */
 function AWM_options_page() {
-        echo $this->optionsMessage;
+    echo $this->databaseMessage;
+           echo $this->optionsMessage;
         $locations = array();
         if (function_exists('get_registered_nav_menus'))
             $locations = (array) get_registered_nav_menus();
@@ -242,9 +265,9 @@ This is the online folder where the menu files are extracted when you upload thi
 	</table>
 
 	<div class="submit" style="text-align: right;">
-		<input type="button" name="info_update" value="Save settings &raquo;" onclick="theform.theaction.value='info_update'; theform.submit();"/>
+		<input type="button" name="info_update" value="Save settings &raquo;" onclick="theform.theaction.value='info_update'; awm_form_validate();"/>
 		&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-		<input type="button" name="generate_structure" value="Save settings &amp; Generate Menu Structure Code &raquo;" onclick="theform.theaction.value='generate_structure'; theform.submit();"/>
+		<input type="button" name="generate_structure" value="Save settings &amp; Generate Menu Structure Code &raquo;" onclick="theform.theaction.value='generate_structure'; awm_form_validate();"/>
 	</div>
 	<div id="AWM_tab_wrapper">
 		<div id="AWM_tabHeaders">
@@ -528,7 +551,7 @@ This is the online folder where the menu files are extracted when you upload thi
 	<div class="submit" style="text-align: center;">
 		<input type="button" name="info_update" value="Save settings &raquo;" onclick="theform.theaction.value='info_update'; awm_form_validate();"/>
 		&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-		<input type="button" name="generate_structure" value="Save settings &amp; Generate Menu Structure Code &raquo;" onclick="theform.theaction.value='generate_structure'; theform.submit();"/>
+		<input type="button" name="generate_structure" value="Save settings &amp; Generate Menu Structure Code &raquo;" onclick="theform.theaction.value='generate_structure'; awm_form_validate();"/>
 	</div>
 
 	<input type="hidden" name="theaction" value="" />

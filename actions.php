@@ -122,11 +122,19 @@ if ($_POST['theaction'] == "createnew") {
                 exit;
 	}
         else if ($_POST['theaction']=='hide_msg') {
-		update_option('AWM_Check_show', FALSE);
+		update_option('AWM_Check_show', 0);
                 ob_end_clean();
                 wp_redirect($_POST['ref'] );
                 exit;
 	}
+        else if ($_POST['theaction']=='hide_addcode') {
+ 
+                update_option("AWM_code_check", 0);
+                ob_end_clean();
+                wp_redirect($_POST['ref'] );
+                exit;
+	}
+        
         else if ($_POST['theaction']=="zip_update") {
                 $message = awm_update_zip();
                 if (!session_id())
