@@ -3,7 +3,7 @@
 Plugin Name: AllWebMenus WordPress Menu Plugin
 Plugin URI: http://www.likno.com/addins/wordpress-menu.html
 Description: WordPress plugin for the AllWebMenus PRO Javascript Menu Maker - Create stylish drop-down menus or sliding menus for your blogs!
-Version: 1.1.8
+Version: 1.1.9
 Author: Likno Software
 Author URI: http://www.likno.com/ 
 */
@@ -47,8 +47,8 @@ class AWM_Plugin
     add_action('admin_menu', array($this,'AWM_add_option_pages'));
     global $wp_version;
     if((float)$wp_version>=2.8){
-    include_once WP_PLUGIN_DIR.'/allwebmenus-wordpress-menu-plugin/widgetClass.php';
-    add_action('widgets_init', create_function('', 'return register_widget("Widget_AllWebMenus");'));
+		include_once WP_PLUGIN_DIR.'/allwebmenus-wordpress-menu-plugin/widgetClass.php';
+		add_action('widgets_init', create_function('', 'return register_widget("Widget_AllWebMenus");'));
     }
 }
 
@@ -65,7 +65,7 @@ function AWM_init_hook(){
 	
 	$this->awm_table_name = $awm_table_name = $this->wpdb->prefix . "awm";
 	$this->dataArray = $dataArray = array();
-	$this->AWM_ver = $AWM_ver = '1.1.8';
+	$this->AWM_ver = $AWM_ver = '1.1.9';
 	
 	$this->awm_total_tabs = $awm_total_tabs = get_option("AWM_total_menus",(int) 0);
 	//if ($_POST["AWM_selected_tab"]=="") $_POST["AWM_selected_tab"]="1";
@@ -78,10 +78,12 @@ function AWM_init_hook(){
 	}
 	$check = get_option("AWM_code_check",1);
 	if ($check && !awm_add_code()) {
+		$nonce= wp_create_nonce('my-nonce');
 		$this->optionsMessage =
 			"<div class=\"updated fade\" style=\"margin-top: 20px;\"><p><strong>Linking code could not be added automatically. You have to add it by yourself. Open the \"header.php\" file (found at \"SITEROOT/wp-content/themes/YourSiteTheme\") and add this code <br /><textarea readonly cols=50 rows=4><?php if (function_exists('AWM_generate_linking_code'))\nAWM_generate_linking_code(); ?></textarea><br /> right after the &lt;body&gt; tag.</strong></p>
 				<form method=\"post\" id=\"the_add_code_form\" name=\"the_add_code_form\" action=\"".plugins_url('actions.php',__FILE__)."\">
 					<input type=\"hidden\" name=\"theaction\" value=\"hide_addcode\"/>
+					<input type=\"hidden\" name=\"_wpnonce\" value=\"$nonce\"/>
 					<input type=\"hidden\" name=\"ref\" value=\" ". admin_url("options-general.php?page=allwebmenus-wordpress-menu-plugin/allwebmenus-wordpress-menu.php") ."\"/>
 					<input type=\"submit\"  value=\"Hide notification\"/>
 				</form>
@@ -218,6 +220,8 @@ STR;
 		<tr><td width="250"><strong>Upload ZIP of your menu "<i id="upload_form_menu_name"></i>":</strong></td>
 		<td>
                     <input type="hidden" name="ref" value="<?php echo admin_url("options-general.php?page=allwebmenus-wordpress-menu-plugin/allwebmenus-wordpress-menu.php"); ?>"/>
+					<?php $nonce= wp_create_nonce('my-nonce'); ?>
+					<input type="hidden" name="_wpnonce" value="<?php echo $nonce; ?>"/>
                     <input name="AWM_menu_js" type="file" />
                     <input type="hidden" name="theaction" value="zip_update"/>
                     <input type="hidden" name="AWM_menu_id" value=""/>
@@ -236,6 +240,8 @@ STR;
         </form >
 <form method="post" enctype="multipart/form-data" id="theform" name="theform" action="<?php echo plugins_url('actions.php',__FILE__); ?>" >
 <input type="hidden" name="ref" value="<?php echo admin_url("options-general.php?page=allwebmenus-wordpress-menu-plugin/allwebmenus-wordpress-menu.php"); ?>"/>
+	<?php $nonce= wp_create_nonce('my-nonce'); ?>
+	<input type="hidden" name="_wpnonce" value="<?php echo $nonce; ?>"/>
     <input id="AWM_selected_tab" name="AWM_selected_tab" type="hidden" value="<?php echo get_option('AWM_selected_tab');?>"/>
 	<table>
 		<tr><td width="250"><strong>Online folder for menu files:</strong></td>
@@ -661,7 +667,9 @@ function AWM_query_vars ( $awm_vars ) {
 //add_filter('query_vars', 'AWM_query_vars');
 
 
-}
+}	// END of Class AWM_Plugin
+
+
 //this functions calls the object's generate linking code
 function AWM_generate_linking_code(){
     global $awmPluginInstance;

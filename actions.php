@@ -1,27 +1,35 @@
 <?php
-ob_start();
-define('WP_USE_THEMES', false);
+if (!function_exists(AWM_get_wp_header_path)) {
+	function AWM_get_wp_header_path()
+	{
+		$base = dirname(__FILE__);
+		$path = false;
 
-function AWM_get_wp_header_path()
-{
-    $base = dirname(__FILE__);
-    $path = false;
+		if (@file_exists(dirname(dirname($base))."/wp-blog-header.php")) {
+			$path = dirname(dirname($base))."/wp-blog-header.php";
+		} elseif (@file_exists(dirname(dirname(dirname($base)))."/wp-blog-header.php")) {
+			$path = dirname(dirname(dirname($base)))."/wp-blog-header.php";
+		} else $path = false;
 
-	if (@file_exists(dirname(dirname($base))."/wp-blog-header.php")) {
-        $path = dirname(dirname($base))."/wp-blog-header.php";
-	} elseif (@file_exists(dirname(dirname(dirname($base)))."/wp-blog-header.php")) {
-        $path = dirname(dirname(dirname($base)))."/wp-blog-header.php";
-	} else $path = false;
-
-	if ($path != false) {
-        $path = str_replace("\\", "/", $path);
-    }
-    return $path;
+		if ($path != false) {
+			$path = str_replace("\\", "/", $path);
+		}
+		return $path;
+	}
 }
-
 
 /** Loads the WordPress Environment and Template */
 require_once(AWM_get_wp_header_path());
+
+$nonce=$_REQUEST['_wpnonce'];
+if (! wp_verify_nonce($nonce, 'my-nonce') ) die('Security check'); 
+
+
+ob_start();
+define('WP_USE_THEMES', false);
+
+if (!session_id()) session_start();
+
 require_once (ABSPATH . 'wp-admin/includes/file.php');
 global $wpdb;
 $awm_table_name = $wpdb->prefix . "awm";
@@ -61,16 +69,13 @@ if (!isset($_POST['theaction'])){
 }
 if ($_POST['theaction'] == "createnew") {
 	$message = awm_create_new_menu();
-	if (!session_id())
-		session_start();
-		$_SESSION['message'] = $message;
-		ob_end_clean();
+	$_SESSION['message'] = $message;
+	ob_end_clean();
 	wp_redirect($_POST['ref'] );
 	exit;
 } else if ($_POST['theaction']=="delete") {
 	// update all values
 	$message = awm_delete_menu();
-	if (!session_id()) session_start();
 	$_SESSION['message'] =  '<div class="updated fade"><p><strong>'.$message.'</strong></p></div>';
 	ob_end_clean();
 	wp_redirect($_POST['ref'] );
@@ -83,8 +88,6 @@ if ($_POST['theaction'] == "createnew") {
 		ob_end_clean();
 		wp_redirect($_POST['ref']."&generated=true" );
 	} else{
-		if (!session_id())
-		session_start();
 		$_SESSION['message'] =  '<div class="updated fade"><p><strong>There are no menus. You can create one using the appropriate button.</strong></p></div>';
 		ob_end_clean();
 		wp_redirect($_POST['ref'] );
@@ -109,7 +112,6 @@ if ($_POST['theaction'] == "createnew") {
 	// first update all values, then reset this tab to defaults
 	awm_update_option_values();
 	awm_set_default_option_values(get_option('AWM_selected_tab'));
-	if (!session_id()) session_start();
 	$_SESSION['message'] =  '<div class="updated fade"><p><strong>Default Settings Loaded!</strong></p></div>';
 	ob_end_clean();
 	wp_redirect($_POST['ref'] );
@@ -117,7 +119,6 @@ if ($_POST['theaction'] == "createnew") {
 } else if ($_POST['theaction']=="info_update") {
 	// update all values
 	$message = awm_update_option_values();
-	if (!session_id()) session_start();
 	$_SESSION['message'] =  '<div class="updated fade"><p><strong>'.$message.'</strong></p></div>';
 	ob_end_clean();
 	wp_redirect($_POST['ref'] );
@@ -135,7 +136,6 @@ if ($_POST['theaction'] == "createnew") {
 } else if ($_POST['theaction']=="zip_update") {
 	if (strpos($_SERVER['HTTP_REFERER'],"wp-admin/options-general.php?page=allwebmenus-wordpress-menu-plugin/allwebmenus-wordpress-menu.php")<1) { echo "Access error! Please contact: support@likno.com";exit;}
 	$message = awm_update_zip();
-	if (!session_id()) session_start();
 	$_SESSION['message'] =  '<div class="updated fade"><p><strong>'.$message.'</strong></p></div>';
 	ob_end_clean();
 	wp_redirect($_POST['ref'] );

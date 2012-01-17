@@ -4,7 +4,7 @@ Author: Likno Software
 Author URI: http://www.likno.com
 Plugin URI: http://www.likno.com/addins/wordpress-menu.html
 Tags: web menu, allwebmenus, drop down menu, javascript menu, dhtml menu, menu builder, navigation menu, css menu, ajax menu
-Stable Tag: 1.1.8
+Stable Tag: 1.1.9
 Requires at least: 2.3
 Tested up to: 3.3
 
