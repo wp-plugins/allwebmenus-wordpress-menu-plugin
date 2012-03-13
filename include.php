@@ -9,8 +9,9 @@ function awm_add_code(){
 	else
 		return false;
 	//checking if htmp.tpl.php is writable
-	$wantedPerms = 0755;
-	$actualPerms = fileperms($file_path);
+	$wantedPerms = octdec("0755");
+	$actualPerms = octdec(substr(sprintf("%o",fileperms($file_path)),-4));
+	
 	if($actualPerms < $wantedPerms){
 		if (!chmod ( $file_path , $wantedPerms )){
 			return false;
@@ -24,20 +25,20 @@ function awm_add_code(){
 				$file =$pieces[0].$matches[0]."\n<?php if (function_exists('AWM_generate_linking_code'))AWM_generate_linking_code(); ?>".$pieces[1];
 				$fp = fopen($file_path, 'w');
 				if (!$fp) {
-					chmod ( $file_path , $actualPerms );
+					if ($actualPerms < $wantedPerms) @chmod ( $file_path , $actualPerms );
 					return false;
 				}
 			   fwrite($fp, $file);
 			   fclose($fp);
-			   chmod ( $file_path , $actualPerms );
+				if ($actualPerms < $wantedPerms) @chmod ( $file_path , $actualPerms );
 			   return true;
 			}
 		} else {
-            chmod ( $file_path , $actualPerms );
+			if ($actualPerms < $wantedPerms) @chmod ( $file_path , $actualPerms );
             return false;
         }
 	}
-	chmod ( $file_path , $actualPerms );
+	if ($actualPerms < $wantedPerms) @chmod ( $file_path , $actualPerms );
 	return true;
 }
 
@@ -462,22 +463,21 @@ function awm_delete_widget_instance($awm_t, $isId = false) {
 
 /* The function that uploads the zip file */
 function awm_update_zip() {
-	global $awm_table_name,$wpdb;
+ 	global $awm_table_name,$wpdb;
 	global $awm_total_tabs;
 	update_option('AWM_selected_tab', (string) $_POST["AWM_selected_tab_c"]);
 	foreach ( $_FILES as $src ) {
 		if ($src['size']) {
 			$folder = get_option( 'AWM_menu_path' );
-			if ($src['name'] != "awm".($or_name =$wpdb->get_var("SELECT name from $awm_table_name where id = ".(int) $_POST["AWM_menu_id"])).'.zip')
-			return "Error: Wrong filename (".$src['name']."). It should be: 'awm".$or_name."'.";
-			if (file_exists (ABSPATH.$folder.$src['name']))
-			unlink ( ABSPATH.$folder.$src['name'] );
+			$or_name = "awm".$wpdb->get_var("SELECT name from $awm_table_name where id = ".(int) $_POST["AWM_menu_id"]).".zip";
+			if ($src['name'] != $or_name) return "Error: Wrong filename (".$src['name']."). It should be: '".$or_name."'.";
+			if (file_exists (ABSPATH.$folder.$src['name'])) unlink ( ABSPATH.$folder.$src['name'] );
 			if (!file_exists(ABSPATH.$folder)) {
 				if (!mkdir(ABSPATH.$folder))
-					return "Error: This folder does not exist '".$folder."'. You should create it by yourself." ;
+					return "Error: The folder '".$folder."' does not exist and could not be automatically created. <br>You should create it by yourself and make sure that it has 757 permissions.";
 			}
-			$wantedPerms = 0755;
-			$actualPerms = fileperms(ABSPATH.$folder);
+			$wantedPerms = octdec("0755");
+			$actualPerms = octdec(substr(sprintf("%o",fileperms(ABSPATH.$folder)),-4));
 			if($actualPerms < $wantedPerms) {
 				if (!chmod ( ABSPATH.$folder , $wantedPerms )) {
 					return "Error: Cannnot write to folder: '".$folder."'." ;
@@ -487,6 +487,7 @@ function awm_update_zip() {
 			$overrides = array( 'test_form' => false);
 			if ($uploads_use_yearmonth_folders = get_option( 'uploads_use_yearmonth_folders' ))
 				update_option('uploads_use_yearmonth_folders', 0);
+			define('FS_METHOD', 'direct');
 			WP_Filesystem();
 			$file = wp_handle_upload( $src, $overrides );
 			if ($uploads_use_yearmonth_folders == 1)
@@ -495,7 +496,7 @@ function awm_update_zip() {
 				$result = unzip_file($file['file'], ABSPATH.$folder );
 				if (is_wp_error($result)){
 					@unlink($file['file']);
-					@chmod ( $file_path , $actualPerms );
+					if ($actualPerms < $wantedPerms) @chmod ( ABSPATH.$folder , $actualPerms );
 					return "Error: Unzipping file failed.";
 				}
 				$struct = "";
@@ -514,11 +515,11 @@ function awm_update_zip() {
 				$wpdb->query("UPDATE $awm_table_name SET menu_structure='$struct' WHERE name='$or_name'");
 			} else {
 				@unlink($file['file']);
-				@chmod ( $file_path , $actualPerms );
+				if ($actualPerms < $wantedPerms) @chmod ( ABSPATH.$folder , $actualPerms );
 				return "ZIP upload requires WordPress version 2.5 or greater.";
 			}
 			@unlink($file['file']);
-			@chmod ( $file_path , $actualPerms );
+			if ($actualPerms < $wantedPerms) @chmod ( ABSPATH.$folder , $actualPerms );
 			return "Menu files successfully uploaded.";
 		}
 	}

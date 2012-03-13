@@ -93,21 +93,6 @@ if ($_POST['theaction'] == "createnew") {
 		wp_redirect($_POST['ref'] );
 	}
 	exit;
-/*	} elseif ($_POST['theaction']=='Activate') {
-		echo '<div class="updated fade"><p><strong>';
-		if (!in_array('yet-another-related-posts-plugin/yarpp.php', get_option('active_plugins'))) {
-			include_once('yet-another-related-posts-plugin/yarpp.php');
-			update_option('AWM_YARPP', TRUE);
-			echo "YARPP Activated!";
-		} else {
-			update_option('AWM_YARPP', TRUE);
-			echo "YARPP Activated!";
-		}
-	    echo '</strong></p></div>';
-	} elseif ($_POST['theaction']=='Deactivate') {
-		update_option('AWM_YARPP', FALSE);
-		echo '<div class="updated fade"><p><strong>YARPP Dectivated!</strong></p></div>';
-*/	
 } else if ($_POST['theaction']=="set_defaults") {
 	// first update all values, then reset this tab to defaults
 	awm_update_option_values();

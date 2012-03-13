@@ -3,7 +3,7 @@
 Plugin Name: AllWebMenus WordPress Menu Plugin
 Plugin URI: http://www.likno.com/addins/wordpress-menu.html
 Description: WordPress plugin for the AllWebMenus PRO Javascript Menu Maker - Create stylish drop-down menus or sliding menus for your blogs!
-Version: 1.1.9
+Version: 1.1.11
 Author: Likno Software
 Author URI: http://www.likno.com/ 
 */
@@ -65,7 +65,7 @@ function AWM_init_hook(){
 	
 	$this->awm_table_name = $awm_table_name = $this->wpdb->prefix . "awm";
 	$this->dataArray = $dataArray = array();
-	$this->AWM_ver = $AWM_ver = '1.1.9';
+	$this->AWM_ver = $AWM_ver = '1.1.11';
 	
 	$this->awm_total_tabs = $awm_total_tabs = get_option("AWM_total_menus",(int) 0);
 	//if ($_POST["AWM_selected_tab"]=="") $_POST["AWM_selected_tab"]="1";
@@ -602,7 +602,7 @@ function AWM_generate_linking_code() {
 		if ($gnr=="JS" || $gnr=="ULLI") {
 			echo "<script type='text/javascript'>var MenuLinkedBy='AllWebMenus [4]',awmMenuName='" . $awm_name . "',awmBN='WP';awmAltUrl='';</script>\n";
 			echo "<script charset='UTF-8' src='" . get_bloginfo('url') . get_option('AWM_menu_path') . $awm_name . ".js' type='text/javascript'></script>\n";
-			echo "<script type='text/javascript'>if (typeof(Menu)!='undefined') awmBuildMenu();\n";
+			echo "<script type='text/javascript'>".($gnr=="JS"?"if (typeof(Menu)!='undefined') ":"")."awmBuildMenu();\n";
 			echo "<!-- -------  Add your Server-Side code right after this comment  ---------- -->\n";
 			if ($gnr=="ULLI") echo "</script>\n";
 		} elseif ($gnr=="CSS") {
