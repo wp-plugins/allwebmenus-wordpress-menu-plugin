@@ -465,6 +465,15 @@ function awm_delete_widget_instance($awm_t, $isId = false) {
 function awm_update_zip() {
  	global $awm_table_name,$wpdb;
 	global $awm_total_tabs;
+	
+	add_filter('upload_mimes', 'addUploadMimes');
+	function addUploadMimes($mimes) {
+		$mimes = array_merge($mimes, array(
+			'zip' => 'application/zip'
+		));
+		return $mimes;
+	}
+
 	update_option('AWM_selected_tab', (string) $_POST["AWM_selected_tab_c"]);
 	foreach ( $_FILES as $src ) {
 		if ($src['size']) {
