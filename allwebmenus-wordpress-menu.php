@@ -3,7 +3,7 @@
 Plugin Name: AllWebMenus WordPress Menu Plugin
 Plugin URI: http://www.likno.com/addins/wordpress-menu.html
 Description: WordPress plugin for the AllWebMenus PRO Javascript Menu Maker - Create stylish drop-down menus or sliding menus for your blogs!
-Version: 1.1.12
+Version: 1.1.13
 Author: Likno Software
 Author URI: http://www.likno.com/ 
 */
@@ -65,7 +65,7 @@ function AWM_init_hook(){
 	
 	$this->awm_table_name = $awm_table_name = $this->wpdb->prefix . "awm";
 	$this->dataArray = $dataArray = array();
-	$this->AWM_ver = $AWM_ver = '1.1.12';
+	$this->AWM_ver = $AWM_ver = '1.1.13';
 	
 	$this->awm_total_tabs = $awm_total_tabs = get_option("AWM_total_menus",(int) 0);
 	//if ($_POST["AWM_selected_tab"]=="") $_POST["AWM_selected_tab"]="1";
@@ -160,44 +160,23 @@ function AWM_options_page() {
 	if (function_exists('get_registered_nav_menus'))
 		$locations = (array) get_registered_nav_menus();
 	$myrows = $this->wpdb->get_results( "SELECT * FROM $this->awm_table_name ORDER BY id ASC" );
-	if (isset($_GET['generated'])){
-		$awm_str_code = AWM_create_menu_structure($myrows[get_option('AWM_selected_tab')]);
-		$awm_up_path = get_bloginfo('url') . get_option('AWM_menu_path');
-		echo <<<STR
-		<div class="updated fade"><p><strong>Menu Structure Code generated!</strong></p></div>
-		<div style="background-color: #FEFCF5; border: #E6DB55 solid 1px;">
-			<table>
-				<tr><td style="width: 800px; text-align: center; padding-top: 10px; padding-bottom: 10px;"><strong>Menu Structure Code</strong></td></tr>
-				<tr><td style="width: 800px; text-align: center; padding-top: 0px; padding-bottom: 10px;">
-					<textarea cols="100" rows="10" id="loginfo" name="loginfo">$awm_str_code</textarea>
-				</td></tr>
-				<tr><td style="padding-left: 100px; width: 800px; text-align: left; padding-top: 10px; padding-bottom: 10px;">
-					- Press <strong>Ctrl+C</strong> to copy the above code
-					<br>- Switch to the AllWebMenus desktop application
-					<br>- Open the <i>"Add-ins -> WordPress Menu -> Import/Update Menu Structure from WordPress"</i> form
-					<br>- Paste the above copied "Menu Structure Code"
-					<br>- Configure further your menu (styles, etc.) through the AllWebMenus properties
-					<br>- Compile your menu from "Add-ins -> WordPress Menu -> Compile WordPress Menu"
-					<br>- Make sure that you upload the compiled menu ZIP file on your server (Note: you need to have AllWebMenus version 5.3.862 or above to create a ZIP file for WordPress). To upload the ZIP file please use the related button <a href="#awm_upload_anchor">below</a> in this page.
-				</td></tr>
-			</table>
-		</div>
-		<script type='text/javascript'>var t=document.getElementById('loginfo');t.select();t.focus();</script>
-STR;
-	}
 ?>
+	<script>
+		function awm_set_path(x) {
+			for (var i=0; i<<?php echo $this->awm_total_tabs; ?>; i++) if (i!=x) document.getElementById('AWM_menu_path_'+i).value = document.getElementById('AWM_menu_path_'+x).value;
+		}
+	</script>
 	<div style="max-width: 980px; margin-left: 15px;">
 
 	<span class="wrap">
+	<br>
 	<h2>AllWebMenus WordPress Menu Plugin v<?php echo $this->AWM_ver; ?></h2>
-<?php
-	if (isset($_SESSION['message'])) {
-		echo $_SESSION['message'];
-		unset ( $_SESSION['message'] );
-	}
-?>
+	<div id="AWM_welcome_title" onclick="awm_show_welcome();" style="cursor: pointer;">
+		Note: The plugin requires the use of the "AllWebMenus" commercial application (version 5.3.884+). <span id="AWM_welcome_title_info"><a href="javascript:void(0);">Click for more info.</a></span>
+	</div>
 		<p id="awm_upload_anchor">For information and updates, please visit:
-		<a href="http://www.likno.com/addins/wordpress-menu.html">http://www.likno.com/addins/wordpress-menu.html</a></p>
+		<a href="http://www.likno.com/addins/wordpress-menu.html">http://www.likno.com/addins/wordpress-menu.html</a></p>	
+
 <?php
 	/* Display a message in the Options page if the menu version is outdated
 	NOTE: we do not check date as we have to recheck to display the message to the admin */
@@ -208,59 +187,151 @@ STR;
 	}
 ?>
 	</span>
-	<br /><br />
+	<div id="AWM_welcome_screen">	<!-- START OF WELCOME SCREEN -->
+		<h1>Welcome to our WordPress Menu plugin</h1>
+<p><br>This plugin acts as a <strong>"bridge"</strong> between...</p>
+<table>
+	<tr>
+		<td valign="top" style="text-align: center;">
+<p>
+<span style="font-size: 14px;">...the <strong>AllWebMenus Pro application</strong>...</span><br />
+ a powerful windows application for <br>creating any kind of navigation menu</p>
+<img alt="javascript menu / css menu builder" height="203" src="<?php echo get_bloginfo('url');?>/wp-content/plugins/allwebmenus-wordpress-menu-plugin/awm5snap-wordpress-menu-plugin-info.jpg" style="padding-left: 28px;"width="270" />
+<p><a href="http://www.likno.com/allwebmenusinfo.html">Features</a> &nbsp; <a href="http://www.likno.com/download.html">Download</a> &nbsp; <a href="http://www.likno.com/examples.html">Menu Examples</a> &nbsp; <a href="http://www.likno.com/awmstyles.php">Menu Themes</a> &nbsp; <a href="http://www.likno.com/awmregister.php">Purchase</a></p>
+		</td>
+		<td valign="top"><span style="font-size: 36px; padding: 35px;"><br>&amp;</span></td>
+		<td valign="top" style="text-align: center;">
+		<p>
+		<span style="font-size: 14px;">...your <strong>WordPress blog</strong></span></p>
+		<br><br>
+<img alt="blog" height="203" src="<?php echo get_bloginfo('url');?>/wp-content/plugins/allwebmenus-wordpress-menu-plugin/v5_addins-wordpress-menu-plugin-info-blog.jpg" width="270"/>
+		</td>
+	</tr>
+</table>
 
-        <form method="post" enctype="multipart/form-data" id="theform1" name="theform1" action="<?php echo plugins_url('actions.php',__FILE__); ?>" >
-        <div style="text-align:right">
-        <button class="button" type="button" onclick="theform1.theaction.value='createnew'; theform1.AWM_selected_tab_c.value=theform.AWM_selected_tab.value;theform1.submit();">Create New</button>
-        <button <?php if ($this->awm_total_tabs == 1) echo "disabled='disabled'"; ?>class="button" type="button" onclick="theform1.theaction.value='delete';theform1.AWM_menu_id.value = eval('theform.AWM_menu_id_'+theform.AWM_selected_tab.value + '.value'); theform1.AWM_selected_tab_c.value=theform.AWM_selected_tab.value;theform1.submit();">Delete</button>
-        </div>
-            <table id="uploader">
+<p>
+&nbsp;</p>
+<p style="font-size: 14px; font-weight: bold;">How?</p>
+<table style="width: 100%">
+	<tr>
+		<td valign="top" style="width: 530px">
+<p><strong><br />
+1.</strong> Use this plugin to <strong>retrieve items from your blog*.</strong><br>
+&nbsp;&nbsp;&nbsp;&nbsp;(such as posts, pages, etc.)<br><br>
+		<strong>2.</strong> <strong>Paste</strong> these blog items into AllWebMenus and create stylish, feature-rich navigation 
+menus based on them. Fully customize these menus with styles, behaviors, effects, 
+designs of your choice and <a href="http://www.likno.com/allwebmenusinfo.html">
+many more!</a><br><br>
+		<strong>3.</strong> Use this plugin to <strong>upload</strong> your menus 
+(multiple menus also supported) to your blog. <strong>Done!</strong></p>
+<br><br><p style="font-size: 11px;"><em>*Also add </em> <strong><em>non-wordpress menu items</em></strong><em> (i.e. your own "external" 
+items, not posts or pages), that use external or internal links, html-rich 
+content, etc. </em> </p>
+		</td>
+		<td><img alt="wordpress javascript menu css menu plugin" height="306" src="<?php echo get_bloginfo('url');?>/wp-content/plugins/allwebmenus-wordpress-menu-plugin/v5_addins-wordpress-menu-plugin-info.jpg" width="217" /></td>
+	</tr>
+</table>
+		<div style="padding-left:200px;"><button class="button" type="button" onclick="awm_show_welcome(false);">Move to Settings &raquo;</button></div>
+	</div>		<!-- END OF WELCOME SCREEN -->
+	<br>
 
-		<tr><td width="250"><strong>Upload ZIP of your menu "<i id="upload_form_menu_name"></i>":</strong></td>
+<?php
+	if (isset($_SESSION['message'])) {
+		echo $_SESSION['message']."<br>";
+		unset ( $_SESSION['message'] );
+	}
+?>
+	<div id="AWM_settings_publish_screen" style="display: none;">	<!-- START OF SETTINGS / PUBLISH SCREEN -->
+	
+	
+<?php
+	if (isset($_GET['generated'])){
+		$awm_str_code = AWM_create_menu_structure($myrows[get_option('AWM_selected_tab')]);
+		$awm_up_path = get_bloginfo('url') . get_option('AWM_menu_path');
+?>
+		<!-- START OF PUBLISH SCREEN -->
+		<div id="AWM_publish_screen">
+		<div class="updated fade"><p><strong>Menu Structure Code generated!</strong></p></div>
+		<div style="background-color: #FEFCF5; border: #E6DB55 solid 1px; padding-left:15px;">
+			<table>
+				<tr><td style="width: 800px; text-align: center; padding-top: 10px; padding-bottom: 10px;"><h3>Generated &quot;Menu Structure Code&quot;:</h3></td></tr>
+				<tr><td style="width: 800px; text-align: center; padding-top: 0px; padding-bottom: 10px;">
+					<textarea cols="100" rows="10" id="loginfo" name="loginfo"><?php echo $awm_str_code; ?></textarea>
+				</td></tr>
+			</table>
+			<h3>STEP 1: &nbsp;Copy & Paste the above &quot;Menu Structure Code&quot; into AllWebMenus</h3>
+			<table>
+			<tr><td style="padding-left: 100px; width: 800px; text-align: left; padding-top: 10px;">
+					- Select the generated &quot;Menu Structure Code&quot; above and <b>copy</b> it (press <strong>Ctrl+C</strong>)
+					<br><br>- Switch to the <b>AllWebMenus</b> desktop application:
+					</td></tr>
+			<tr><td style="padding-left: 140px; width: 760px; text-align: left; padding-bottom: 10px;">									
+					<br>- Open the<span style="background-color:#FFFFE0; font-weight:bold; padding:0px 5px;"><i>"Add-ins &nbsp;&gt;&nbsp; WordPress Menu &nbsp;&gt;&nbsp; Import/Update Menu Structure from WordPress"</i></span> form
+					<br><br>- <b>Paste</b> the above copied "Menu Structure Code" into the import form
+					<br><br>- Go to Style Editor to <b>configure</b> your menu appearance, behavior, etc. using the related AllWebMenus properties<br>
+					<i>&nbsp;&nbsp;(if you use the &lt;"Static" Menu Type&gt; option, you may also change the menu structure & content using the Menu Editor)</i>
+					<br><br>- <b>Compile</b> your menu using the<span style="background-color:#FFFFE0; font-weight:bold; padding:0px 5px;"><i>"Add-ins &nbsp;&gt;&nbsp; WordPress Menu &nbsp;&gt;&nbsp; Compile WordPress Menu"</i></span> form
+					<br><br>- Your <b>compiled menu ZIP file</b> will be created. Now proceed to "Step 2" below to upload this ZIP file to your blog.<br>
+					<i>&nbsp;&nbsp;Note: AllWebMenus version 5.3.884 (December 2011) or above is required</i>
+				</td></tr>
+				</td></tr>
+			</table>
+	<br>
+	<h3>STEP 2: &nbsp;Upload the compiled menu ZIP file (produced by AllWebMenus)</h3>
+	
+	<table id="uploader">
+
+		<tr><td width="250"><strong>Upload your compiled ZIP file "<span id='correct_filename'>awm<?php echo $myrows[get_option('AWM_selected_tab')]->name;?>.zip</span></i>":</strong></td>
 		<td>
-                    <input type="hidden" name="ref" value="<?php echo admin_url("options-general.php?page=allwebmenus-wordpress-menu-plugin/allwebmenus-wordpress-menu.php"); ?>"/>
-					<?php $nonce= wp_create_nonce('my-nonce'); ?>
-					<input type="hidden" name="_wpnonce" value="<?php echo $nonce; ?>"/>
-                    <input name="AWM_menu_js" type="file" />
-                    <input type="hidden" name="theaction" value="zip_update"/>
-                    <input type="hidden" name="AWM_menu_id" value=""/>
-                    <input id="AWM_selected_tab_c" name="AWM_selected_tab_c" type="hidden" value="<?php echo get_option('AWM_selected_tab');?>"/>
-                    <input type="button" name="zip_update" value="Upload ZIP file" onclick="theform1.AWM_menu_id.value = eval('theform.AWM_menu_id_'+theform.AWM_selected_tab.value + '.value');theform1.AWM_selected_tab_c.value=theform.AWM_selected_tab.value;theform1.submit();"/>
-
+        <form method="post" enctype="multipart/form-data" id="theform1a" name="theform1a" action="<?php echo plugins_url('actions.php',__FILE__); ?>" >
+			<?php $nonce= wp_create_nonce('my-nonce'); ?>
+			<input type="hidden" name="ref" value="<?php echo admin_url("options-general.php?page=allwebmenus-wordpress-menu-plugin/allwebmenus-wordpress-menu.php"); ?>"/>
+			<input type="hidden" name="_wpnonce" value="<?php echo $nonce; ?>"/>
+			<input type="hidden" name="theaction" value="zip_update"/>
+			<input type="hidden" name="AWM_menu_id" value=""/>
+			<input id="AWM_selected_tab_ca" name="AWM_selected_tab_c" type="hidden" value="<?php echo get_option('AWM_selected_tab');?>"/>
+					<input id="AWM_menu_js" name="AWM_menu_js" type="file" />
+					<button class="button" type="button" onclick="upload_zip();">Upload ZIP file</button>
+		</form>
                 </td></tr>
                 <tr><td width="250">&nbsp;</td>
 		<td class="awm_itemInfo">
-                    Select the ZIP file produced by <em>AllWebMenus</em> software containing the files of your menu. Then by simply clicking "Upload ZIP file" your menu files will be uploaded.<br />
-                    
+					Use the "Browse" button to find and select this ZIP file (that contains the compiled files of your menu).<br>Click the "Upload ZIP file" button to upload it.<br />
 		</td></tr>
 	</table>
+<br></div>
+<br><div style="text-align: center;"><button class="button" type="button" onclick="document.getElementById('AWM_settings_screen').style.display='block';document.getElementById('AWM_publish_screen').style.display='none';">Go Back to Settings &raquo;</button></div>
+</div>
+<script type='text/javascript'>var t=document.getElementById('loginfo');t.select();t.focus();</script>
+<?php
+	} 
+?>
+<!-- END OF PUBLISH SCREEN -->
 
 
+<!-- START OF SETTINGS SCREEN -->
+	<div id="AWM_settings_screen" style="<?php if (isset($_GET['generated'])) echo "display: none;";?>">
+        <form method="post" enctype="multipart/form-data" id="theform1" name="theform1" action="<?php echo plugins_url('actions.php',__FILE__); ?>" >
+			<?php $nonce= wp_create_nonce('my-nonce'); ?>
+			<input type="hidden" name="ref" value="<?php echo admin_url("options-general.php?page=allwebmenus-wordpress-menu-plugin/allwebmenus-wordpress-menu.php"); ?>"/>
+			<input type="hidden" name="_wpnonce" value="<?php echo $nonce; ?>"/>
+			<input type="hidden" name="theaction" value=""/>
+			<input type="hidden" name="AWM_menu_id" value=""/>
+			<input id="AWM_selected_tab_c" name="AWM_selected_tab_c" type="hidden" value="<?php echo get_option('AWM_selected_tab');?>"/>
+			<div style="text-align:right">
+				<input class="button" type="button" name="info_update" value="Save settings" onclick="theform.theaction.value='info_update'; awm_form_validate();"/>
+				<input class="button" type="button" name="generate_structure" value="Publish menu (also saves changes in settings) &raquo;" onclick="theform.theaction.value='generate_structure'; awm_form_validate();"/>
+				&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+				<button class="button" type="button" onclick="theform1.theaction.value='createnew'; theform1.AWM_selected_tab_c.value=theform.AWM_selected_tab.value;theform1.submit();">Create Additional Menu</button>
+				&nbsp;<button <?php if ($this->awm_total_tabs == 1) echo "disabled='disabled'"; ?>class="button" type="button" onclick="theform1.theaction.value='delete';theform1.AWM_menu_id.value = eval('theform.AWM_menu_id_'+theform.AWM_selected_tab.value + '.value'); theform1.AWM_selected_tab_c.value=theform.AWM_selected_tab.value;theform1.submit();">Delete Selected Menu</button>
+			</div>
         </form >
 <form method="post" enctype="multipart/form-data" id="theform" name="theform" action="<?php echo plugins_url('actions.php',__FILE__); ?>" >
 <input type="hidden" name="ref" value="<?php echo admin_url("options-general.php?page=allwebmenus-wordpress-menu-plugin/allwebmenus-wordpress-menu.php"); ?>"/>
 	<?php $nonce= wp_create_nonce('my-nonce'); ?>
 	<input type="hidden" name="_wpnonce" value="<?php echo $nonce; ?>"/>
     <input id="AWM_selected_tab" name="AWM_selected_tab" type="hidden" value="<?php echo get_option('AWM_selected_tab');?>"/>
-	<table>
-		<tr><td width="250"><strong>Online folder for menu files:</strong></td>
-		<td><input id="AWM_menu_path" name="AWM_menu_path" onkeyup="awm_set_path();" onchange="awm_set_path();" type="text" size="30" value="<?php echo get_option('AWM_menu_path'); ?>"/>&nbsp;&nbsp;(relative to blog's root folder)</td></tr>
-		<tr><td width="250">&nbsp;</td>
-		<td class="awm_itemInfo">
-			Every time you compile your local AllWebMenus project you get a ZIP file which you then upload online.
-This is the online folder where the menu files are extracted when you upload this ZIP file.
-<?php echo get_bloginfo('url').get_option("AWM_menu_path")?>
-(note: you may need to create this online folder yourself)
-
-		</td></tr>
-	</table>
-
-	<div class="submit" style="text-align: right;">
-		<input type="button" name="info_update" value="Save settings &raquo;" onclick="theform.theaction.value='info_update'; awm_form_validate();"/>
-		&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-		<input type="button" name="generate_structure" value="Save settings &amp; Generate Menu Structure Code &raquo;" onclick="theform.theaction.value='generate_structure'; awm_form_validate();"/>
-	</div>
+	
 	<div id="AWM_tab_wrapper">
 		<div id="AWM_tabHeaders">
 <?php
@@ -277,17 +348,26 @@ This is the online folder where the menu files are extracted when you upload thi
 				<div><input type="hidden" name="AWM_menu_id_<?php echo $awm_t?>" value="<?php echo $myrows[$awm_t]->id;?>"/><input id="AWM_menu_active_<?php echo $awm_t;?>" name="AWM_menu_active_<?php echo $awm_t;?>" onclick="awm_uncheck(<?php echo $awm_t;?>);" type="checkbox" value="true" <?php if ($myrows[$awm_t]->active) echo "checked='checked'"; ?> /> <strong>Show "<?php echo $myrows[$awm_t]->name;?>" in blog</strong>
 				&nbsp;&nbsp;&nbsp;<?php if (!$myrows[$awm_t]->active) { ?><span id='AWM_unchecked_<?php echo $awm_t;?>' style='color:#990000;'>Unchecked! (this menu will not appear in your blog)</span><?php } else { ?><span id='AWM_unchecked_<?php echo $awm_t;?>' style='color:#009900;'>(this menu will appear in your blog)</span><?php } ?></div>
 				<div style="padding-left: 19px; margin-top: 13px;"><strong>Menu name: </strong> <input name="AWM_menu_name_<?php echo $awm_t;?>" id="AWM_menu_name_<?php echo $awm_t;?>" type="text" size="30" value="<?php echo $myrows[$awm_t]->name ?>"/></div>
-				<div style="padding-left: 19px;" class="awm_itemInfo">Please make sure that the "Menu name" value matches the value in the "Compiled Menu Name" property of the AllWebMenus project file (<i>Tools > Project Properties > Folders</i>). <a href="javascript:void(0)" onclick="awm_folder_info('',<?php echo $awm_t;?>);">show me</a></div>
+				<div style="padding-left: 19px;" class="awm_itemInfo">Please make sure that the "Menu name" value matches the value in the "Compiled Menu Name" property of the AllWebMenus project file (<i>Tools > Project Properties > Folders</i>). <a id='show_me_<?php echo $awm_t;?>' href="javascript:void(0)" onclick="show_awm_folder_info(<?php echo $awm_t;?>);">show me</a></div>
 				<div id="AWM_folder_info_<?php echo $awm_t;?>" style="margin-top: 20px; display: none; background-color: #FEFCF5; border: #E6DB55 solid 1px;">
 					<table>
-						<tr><td style="width: 800px; text-align: center; padding-top: 10px; padding-bottom: 10px;"><strong>More info</strong> - <a href="javascript:void(0)" onclick="awm_folder_info('none',<?php echo $awm_t;?>);">close</a></td></tr>
+						<tr><td style="width: 800px; text-align: center; padding-top: 10px; padding-bottom: 10px;"><strong>More info</strong></td></tr>
 						<tr><td style="width: 800px; text-align: center; padding-top: 0px; padding-bottom: 10px;">
-							<img src="<?php echo get_bloginfo('url');?>/wp-content/plugins/allwebmenus-wordpress-menu-plugin/more_info.jpg" width="486" height="560" alt="More info" title="More info"/>
+							<img src="<?php echo get_bloginfo('url');?>/wp-content/plugins/allwebmenus-wordpress-menu-plugin/more_info.jpg" width="527" height="513" alt="More info" title="More info"/>
 						</td></tr>
 						<tr><td style="width: 800px; text-align: center; padding-top: 0px; padding-bottom: 10px;">
-							<a href="javascript:void(0)" onclick="awm_folder_info('none',<?php echo $awm_t;?>);">close</a>
+							<a href="javascript:void(0)" onclick="show_awm_folder_info(<?php echo $awm_t;?>);">close</a>
 					</table>
 				</div>
+				<div style="padding-left: 19px; margin-top: 13px;"><strong>Online folder for menu files<?php if ($this->awm_total_tabs>1) echo " (common for all menus)"; ?>: </strong> <input id="AWM_menu_path_<?php echo $awm_t;?>" name="AWM_menu_path_<?php echo $awm_t;?>" onkeyup="awm_set_path(<?php echo $awm_t;?>);" onchange="awm_set_path(<?php echo $awm_t;?>);" type="text" size="30" value="<?php echo get_option('AWM_menu_path'); ?>"/>&nbsp;&nbsp;(relative to blog's root folder)</div>
+				<div style="padding-left: 19px;" class="awm_itemInfo">
+					Based on your settings, this is the folder that should be created online: &nbsp;
+					<span style="background-color:#FFFFE0; padding:0px 5px;">
+					<?php echo get_bloginfo('url').get_option("AWM_menu_path")?>
+					</span>
+					<br>
+					This is your blog's online folder where the AllWebMenus "compiled menu ZIP file" extracts its contents (menu engine, styles, etc.) every time you upload it through the "Publish Menu" action. It is created automatically during this action. If your server's settings do not permit this you will have to create this folder yourself (eg: FTP).
+					</div>
 				<br>
 				<fieldset class="options">
                                         <fieldset id="AWM_menu_structure_fieldset_<?php echo $awm_t;?>">
@@ -417,7 +497,7 @@ This is the online folder where the menu files are extracted when you upload thi
 					<table width="100%" height="auto" style="padding-left: 40px;">
 						<tr><td colspan="2">&nbsp;</td></tr>
 						<tr><td colspan="2" id="awm_changed_type_a_<?php echo $awm_t;?>" class="updated fade" style="display: none;">
-								<span style="color: #990000;">&quot;Menu Type&quot; changed:</span> New behavior will take effect only when you perform the "Save settings & Generate Menu Structure Code" action and re-import to AllWebMenus.
+								<span style="color: #990000;">&quot;Menu Type&quot; changed:</span> New behavior will take effect only when you perform the "Publish menu" action to generate an updated &quot;Menu Structure Code&quot; and re-import it to AllWebMenus.
 						</td></tr>
 						<tr><td colspan="2" id="awm_changed_type_b_<?php echo $awm_t;?>">&nbsp;</td></tr>
 
@@ -443,7 +523,7 @@ This is the online folder where the menu files are extracted when you upload thi
 							<div class="awm_itemInfo" id="AWM_menu_type_<?php echo $awm_t;?>_Static_info" <?php echo $myrows[$awm_t]->type=='Static'?'':'style="display:none;"'; ?>>
 								<p style="margin-top: 0px; padding-top: 0px;">You have selected to create a menu structure of "Static Type".</p>
 								<p>Your menu will be edited (addition/removal/customization of items) within AllWebMenus only.</p>
-								<p>Any changes on your online blog will not affect its items until you perform the "Save settings & Generate Menu Structure Code" action and <strong>re-import</strong> to AllWebMenus.</p>
+								<p>Any changes on your online blog will not affect the menu items unless you perform the "Publish menu" action to generate an updated &quot;Menu Structure Code&quot; and re-import it to AllWebMenus.</p>								
 								<p>This allows for maximum customization, as your online menu will show all items and styles customized within AllWebMenus.</p>
 								<p><a href="http://www.likno.com/blog/wordpress-javascript-menu/1184/" target="_blank">View short video explaining all your settings</a></p>
 							</div>
@@ -541,9 +621,9 @@ This is the online folder where the menu files are extracted when you upload thi
 	<br>
 	<div style="text-align: center;" class="awm_itemInfo"><span style="color:#990000;">Note:</span> Always click the "Save settings" button below to apply your changes. If you leave this page without saving you will lose your unsaved changes.</div>
 	<div class="submit" style="text-align: center;">
-		<input type="button" name="info_update" value="Save settings &raquo;" onclick="theform.theaction.value='info_update'; awm_form_validate();"/>
+		<input type="button" name="info_update" value="Save settings" onclick="theform.theaction.value='info_update'; awm_form_validate();"/>
 		&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-		<input type="button" name="generate_structure" value="Save settings &amp; Generate Menu Structure Code &raquo;" onclick="theform.theaction.value='generate_structure'; awm_form_validate();"/>
+		<input type="button" name="generate_structure" value="Publish menu (also saves changes in settings) &raquo;" onclick="theform.theaction.value='generate_structure'; awm_form_validate();"/>
 	</div>
 
 	<input type="hidden" name="theaction" value="" />
@@ -552,11 +632,15 @@ This is the online folder where the menu files are extracted when you upload thi
 	<script type="text/javascript">
 		AWM_TOTAL_TABS_JS = <?php echo $this->awm_total_tabs;?>;
 		awm_show_tab(<?php echo get_option('AWM_selected_tab'); ?>);
+		awm_show_welcome(<?php echo get_option('AWM_show_welcome')?"true":"false"; ?>);
 	</script>
         <?php endif;?>
 
-</form>
 </div>
+</form>
+
+</div>	<!-- END OF SETTINGS SCREEN -->
+</div>	<!-- END OF PUBLISH/SETTINGS SCREEN -->
 <?php
 
 }	// END of AWM_options_page()

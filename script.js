@@ -2,7 +2,7 @@
 Plugin Name: AllWebMenus WordPress Menu Plugin
 Plugin URI: http://www.likno.com/addins/wordpress-menu.html
 Description: WordPress plugin for the AllWebMenus PRO Javascript Menu Maker - Create stylish drop-down menus or sliding menus for your blogs!
-Version: 1.1.12
+Version: 1.1.13
 Author: Likno Software
 Author URI: http://www.likno.com/ 
 */
@@ -35,6 +35,19 @@ if(!Array.indexOf){
 	}
 }
 
+function awm_show_welcome(x) {
+	if (typeof(x)=="undefined") x = document.getElementById('AWM_welcome_screen').style.display=="none";
+	document.getElementById('AWM_welcome_screen').style.display=x?"block":"none";
+	document.getElementById('AWM_settings_publish_screen').style.display=x?"none":"block";
+	document.getElementById('AWM_welcome_title_info').style.display=x?"none":"inline-block";
+}
+function upload_zip() {
+	if (document.getElementById('AWM_menu_js').value==document.getElementById('correct_filename').innerHTML) {
+		theform1a.AWM_menu_id.value = eval('theform.AWM_menu_id_'+theform.AWM_selected_tab.value + '.value');theform1a.AWM_selected_tab_c.value=theform.AWM_selected_tab.value;theform1a.submit();
+	} else {
+		alert("Wrong filename! The filename should be '"+document.getElementById('correct_filename').innerHTML+"'.");
+	}
+}
 function awm_show_tab(x) {
 	if (typeof(x)=="undefined") x = 0;
 	var i;
@@ -46,7 +59,7 @@ function awm_show_tab(x) {
 	document.getElementById('AWM_tab_header_'+x).className = "awm_tab_header_selected";
 	document.getElementById('AWM_tab_body_'+x).style.display="";
 	document.getElementById('AWM_selected_tab').value = x;
-			document.getElementById("upload_form_menu_name").innerHTML = eval('document.theform.AWM_menu_name_'+x+'.value;');
+//			document.getElementById("upload_form_menu_name").innerHTML = eval('document.theform.AWM_menu_name_'+x+'.value;');
 }
 function awm_select_menu_type(x,t) {
 	document.getElementById('AWM_menu_type_'+t+'_Dynamic_info').style.display="none";
@@ -72,11 +85,10 @@ function awm_uncheck(x) {
 		document.getElementById('AWM_unchecked_'+x).innerHTML = "Unchecked! (this menu will not appear in your blog)";
 	}
 }
-function awm_set_path() {
-//	document.getElementById('AWM_the_path').innerHTML = document.getElementById('AWM_menu_path').value;
-}
-function awm_folder_info(x,t) {
-	document.getElementById('AWM_folder_info_'+t).style.display = x;
+function show_awm_folder_info(t) {
+	x = document.getElementById('AWM_folder_info_'+t).style.display == 'none';
+	document.getElementById('AWM_folder_info_'+t).style.display = x?'':'none';
+	document.getElementById('show_me_'+t).innerHTML = x?'hide me':'show me';
 }
 function awm_select_structure(x,t) {
 	document.getElementById("AWM_menu_structure_use_existing_"+t).style.display = x?"":"none";

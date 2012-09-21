@@ -65,19 +65,28 @@
 			background-color: #CCDDFF;
 			font-weight: bold;
 		}
-                #AWM_tab_wrapper input[disabled]{
-                background-color: #EEE;
-                color: #777;
-                }
-                .awm_other{
-                margin: 20px 0px;
-                }
-                .awm_other input{
-                margin-left: 20px;
-                }
-
-
-                .awm_menu_position{
-                    margin-left: 20px;
-                    margin-top: 20px;
-                }
+		#AWM_tab_wrapper input[disabled]{
+			background-color: #EEE;
+			color: #777;
+		}
+		.awm_other{
+			margin: 20px 0px;
+		}
+		.awm_other input{
+			margin-left: 20px;
+		}
+		.awm_menu_position{
+			margin-left: 20px;
+			margin-top: 20px;
+		}
+		#AWM_welcome_title {
+			display: inline-block;
+			font-size: 11px;
+			color: #555555;
+			font-style: italic;
+		}
+		#AWM_welcome_screen {
+			padding: 10px;
+			margin-right: 5px;
+		}
+		

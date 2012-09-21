@@ -4,9 +4,9 @@ Author: Likno Software
 Author URI: http://www.likno.com
 Plugin URI: http://www.likno.com/addins/wordpress-menu.html
 Tags: web menu, allwebmenus, drop down menu, javascript menu, dhtml menu, menu builder, navigation menu, css menu, ajax menu
-Stable Tag: 1.1.12
+Stable Tag: 1.1.13
 Requires at least: 2.3
-Tested up to: 3.3
+Tested up to: 3.4.2
 
 
 Required software: AllWebMenus PRO (version 5.3.884 and above)
@@ -62,12 +62,15 @@ For documentation, examples and screenshots, please refer to the official plugin
 
 
 == Changelog ==
+= 1.1.13 (requires AllWebMenus Build #884 or above) =
+* Improved the interface & workflow of the plugin.
+* Added a "welcome" page.
 = 1.1.12 (requires AllWebMenus Build #884 or above) =
-* Fixed an issue related to WP not allowing zip files to be uploaded
+* Fixed an issue related to WP not allowing zip files to be uploaded.
 = 1.1.11 (requires AllWebMenus Build #884 or above) =
-* Fixed an issue related to folder permissions
+* Fixed an issue related to folder permissions.
 = 1.1.10 (requires AllWebMenus Build #884 or above) =
-* Fixed a case where UL/LI menus with JS Genre did not work
+* Fixed a case where UL/LI menus with JS Genre did not work.
 = 1.1.9 (requires AllWebMenus Build #884 or above) =
 * Improved the security protection.
 = 1.1.8 (requires AllWebMenus Build #884 or above) =

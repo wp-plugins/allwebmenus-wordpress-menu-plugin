@@ -47,6 +47,7 @@ function awm_set_first_time_options() {
 	add_option('AWM_menu_path', '/wp-content/plugins/allwebmenus-wordpress-menu-plugin/menu/');
 	add_option('AWM_Checked', FALSE);
 	add_option('AWM_Check_show', TRUE);
+	add_option('AWM_show_welcome', TRUE);
 	add_option('AWM_Checked_Date', '00');
 	add_option('AWM_selected_tab', '0');
 }
@@ -245,6 +246,7 @@ function add_genre_column() {
 
 /* This code creates new menu */
 function awm_create_new_menu($firstTime = false) {
+	update_option('AWM_show_welcome', FALSE);
 	global $wpdb,$awm_table_name;
 	$rows_affected = $wpdb->insert($awm_table_name, array('name' => ""));
 	$i = 1;
@@ -252,10 +254,11 @@ function awm_create_new_menu($firstTime = false) {
 		$i++;
 	}
 	$wpdb->update( $awm_table_name, array( 'active' => $firstTime,'name' => (string) "menu".$i ,'pages_name'=>'Pages','pages_ms'=>'main','posts_name'=>'Posts','posts_ms'=>'sub','categories_ms'=>'sub','categories_name'=>'Categories','type'=>'Dynamic' ),array('id'=>$wpdb->insert_id) );
-	return '<div class="updated fade"><p><strong>New menu succesfully created.</strong></p></div>';
+	return '<div class="updated fade"><p><strong>Additional menu succesfully created.</strong></p></div>';
 }
 
 function awm_delete_menu(){
+	update_option('AWM_show_welcome', FALSE);
     global $wpdb,$awm_table_name, $awm_total_tabs;
     if ($awm_total_tabs == 1)
         return  "This is the last menu. You cannot delete it.";
@@ -268,6 +271,7 @@ function awm_delete_menu(){
 
 /* This code saves the form values */
 function awm_update_option_values() {
+	update_option('AWM_show_welcome', FALSE);
 	global $awm_total_tabs,$awm_table_name,$wpdb;
 	
 	if ($awm_total_tabs){
@@ -343,7 +347,7 @@ function awm_update_option_values() {
 				$dataArray[$awm_t]['related_name'] = $_POST["AWM_Related_name_".$awm_t];
 			$wpdb->update($awm_table_name,$dataArray[$awm_t],array( 'id' => (int) $_POST["AWM_menu_id_".$awm_t] ));
 		}
-		update_option('AWM_menu_path', (string) $_POST["AWM_menu_path"]);
+		update_option('AWM_menu_path', (string) $_POST["AWM_menu_path_0"]);
 		update_option('AWM_selected_tab', (string) $_POST["AWM_selected_tab"]);
         return "Settings updated!";
 	} else return "There are no menus. You can create one using the appropriate button.";
@@ -483,13 +487,13 @@ function awm_update_zip() {
 			if (file_exists (ABSPATH.$folder.$src['name'])) unlink ( ABSPATH.$folder.$src['name'] );
 			if (!file_exists(ABSPATH.$folder)) {
 				if (!mkdir(ABSPATH.$folder))
-					return "Error: The folder '".$folder."' does not exist and could not be automatically created. <br>You should create it by yourself and make sure that it has 757 permissions.";
+					return "Error: The folder '".$folder."' does not exist and could not be automatically created. <br>You should create it by yourself and make sure that it has '757' permissions.";
 			}
 			$wantedPerms = octdec("0755");
 			$actualPerms = octdec(substr(sprintf("%o",fileperms(ABSPATH.$folder)),-4));
 			if($actualPerms < $wantedPerms) {
 				if (!chmod ( ABSPATH.$folder , $wantedPerms )) {
-					return "Error: Cannnot write to folder: '".$folder."'." ;
+					return "Error: Cannnot extract files to folder: '".$folder."'. Please make sure that this folder has '757' permissions";
 				}
 			}
 			define('UPLOADS', $folder);
