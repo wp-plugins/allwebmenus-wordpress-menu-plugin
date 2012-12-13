@@ -38,7 +38,7 @@ include_once WP_PLUGIN_DIR.'/allwebmenus-wordpress-menu-plugin/include.php';
 include_once WP_PLUGIN_DIR.'/allwebmenus-wordpress-menu-plugin/widgetClass.php';
 
 
-$awm_total_tabs = $wpdb->get_var($wpdb->prepare("SELECT COUNT(*) FROM %s;",$awm_table_name));
+$awm_total_tabs = $wpdb->get_var($wpdb->prepare("SELECT COUNT(*) FROM $awm_table_name",null));
 
 /*
  * Do the Form Error-Checking

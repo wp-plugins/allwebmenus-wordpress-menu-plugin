@@ -230,7 +230,7 @@ function awm_convert_to_database() {
 			$wpdb->query("ALTER TABLE ".$awm_table_name." ADD related_name tinytext NOT NULL DEFAULT ''");
 			$wpdb->query("UPDATE $awm_table_name SET related_name='Related Posts'");
 		}
-		$awm_total_tabs = $wpdb->get_var($wpdb->prepare("SELECT COUNT(*) FROM %s;",$awm_table_name));
+		$awm_total_tabs = $wpdb->get_var($wpdb->prepare("SELECT COUNT(*) FROM $awm_table_name",null));
 	}
 	return "";
 }
