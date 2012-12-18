@@ -55,7 +55,7 @@ function awm_set_first_time_options() {
 /* This code sets the default option values for a given tab */
 function awm_set_default_option_values($awm_t) {
 	global $wpdb, $awm_table_name;
-    $wpdb->update( $awm_table_name, array( 'name' => (string) "menu".$i ,'pages_name'=>'Pages','pages_ms'=>'main','posts_name'=>'Posts','posts_ms'=>'sub','categories_ms'=>'sub','categories_name'=>'Categories','type'=>'Dynamic','genre'=>'JS' ),array('id'=>$_POST['AWM_menu_id_'.$awm_t]) );
+    $wpdb->update( $awm_table_name, array( 'name' => (string) "menu".$awm_t ,'pages_name'=>'Pages','pages_ms'=>'main','posts_name'=>'Posts','posts_ms'=>'sub','categories_ms'=>'sub','categories_name'=>'Categories','type'=>'Dynamic','genre'=>'JS' ),array('id'=>$_POST['AWM_menu_id_'.$awm_t]) );
 //	update_option('AWM_menu_path', '/menu/');
 }
 
@@ -482,8 +482,9 @@ function awm_update_zip() {
 	foreach ( $_FILES as $src ) {
 		if ($src['size']) {
 			$folder = get_option( 'AWM_menu_path' );
-			$or_name = "awm".$wpdb->get_var("SELECT name from $awm_table_name where id = ".(int) $_POST["AWM_menu_id"]).".zip";
-			if ($src['name'] != $or_name) return "Error: Wrong filename (".$src['name']."). It should be: '".$or_name."'.";
+			$or_name = $wpdb->get_var("SELECT name from $awm_table_name where id = ".(int) $_POST["AWM_menu_id"]);
+			$or_name_full = "awm".$or_name.".zip";
+			if ($src['name'] != $or_name_full) return "Error: Wrong filename (".$src['name']."). It should be: '".$or_name_full."'.";
 			if (file_exists (ABSPATH.$folder.$src['name'])) unlink ( ABSPATH.$folder.$src['name'] );
 			if (!file_exists(ABSPATH.$folder)) {
 				if (!mkdir(ABSPATH.$folder))
