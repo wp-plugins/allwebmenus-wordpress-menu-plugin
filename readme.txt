@@ -16,8 +16,6 @@ Required software: AllWebMenus PRO (version 5.3.884 and above)
 
 The **AllWebMenus WordPress Menu add-in & plugin** combination is designed to retrieve information from your blog (such as posts, pages, etc.) and import it into the AllWebMenus application to create stylish, feature-rich navigation menus, and not only! Apart from creating menu items derived from your blog's structure, fully customize your menus adding your own non-wordpress menu items with external or internal links, html-rich content, colors, borders, effects, designs of your choice and many more!
 
-View [examples of menus created with AllWebMenus](http://www.likno.com/examples.html "examples of menus created with AllWebMenus").
-
 **AllWebMenus** is a web menu builder that requires absolutely no DHTML or Javascript experience from you. It creates cross-browser navigation menus that work alike in all browsers supporting DHTML. A DHTML menu / JavaScript menu can be designed with a simple, tree-like approach. You can then fully customize it by applying a vast available number of features through the Properties Pane or by choosing a predefined appearance from the Theme Gallery. 
 
 For documentation, examples and screenshots, please refer to the official plugin page for [AllWebMenus WordPress Menu](http://www.likno.com/addins/wordpress-menu.html "AllWebMenus WordPress Menu").
