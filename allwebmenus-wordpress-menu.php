@@ -3,7 +3,7 @@
 Plugin Name: AllWebMenus WordPress Menu Plugin
 Plugin URI: http://www.likno.com/addins/wordpress-menu.html
 Description: WordPress plugin for the AllWebMenus PRO Javascript Menu Maker - Create stylish drop-down menus or sliding menus for your blogs!
-Version: 1.1.16
+Version: 1.1.17
 Author: Likno Software
 Author URI: http://www.likno.com/ 
 */
@@ -65,7 +65,7 @@ function AWM_init_hook(){
 	
 	$this->awm_table_name = $awm_table_name = $this->wpdb->prefix . "awm";
 	$this->dataArray = $dataArray = array();
-	$this->AWM_ver = $AWM_ver = '1.1.16';
+	$this->AWM_ver = $AWM_ver = '1.1.17';
 	
 	$this->awm_total_tabs = $awm_total_tabs = get_option("AWM_total_menus",(int) 0);
 	//if ($_POST["AWM_selected_tab"]=="") $_POST["AWM_selected_tab"]="1";
@@ -96,6 +96,7 @@ function AWM_init_hook(){
 	if (!empty($this->databaseMessage))
 		$this->databaseMessage = "<div class=\"updated fade\" style=\"margin-top: 20px;\"><strong>".$this->databaseMessage."</strong></div>";
 	add_genre_column();
+	add_revision_column();
 	
 	$this->awm_total_tabs = $awm_total_tabs;
 	$this->awm_is_yarpp_enabled = $awm_is_yarpp_enabled = in_array('yet-another-related-posts-plugin/yarpp.php', get_option('active_plugins'));
@@ -670,12 +671,12 @@ function awm_menu_args($args) {
  * Generate Linking Code
  */
 function AWM_generate_linking_code() {
-	$i=0;
 	$filter_flag = false;
 	$myrows = $this->wpdb->get_results( "SELECT * FROM $this->awm_table_name WHERE active=1 order by id ASC" );
 	for ($awm_t=0; $awm_t<count($myrows); $awm_t++) {
 		$gnr = $myrows[$awm_t]->menu_genre;
 		$tp = $myrows[$awm_t]->type;
+		$revs = $myrows[$awm_t]->menu_revisions;
 		if ( $myrows[$awm_t]->position !=  "0" && $myrows[$awm_t]->position !=  "awm_widget") {
 			$this->awm_wp_nav_array[$myrows[$awm_t]->position] = "awmAnchor-".$myrows[$awm_t]->name;
 			$filter_flag = true;
@@ -695,12 +696,13 @@ function AWM_generate_linking_code() {
 		}
 
 		if ($gnr=="JS") {
-			if ($tp=='Dynamic') {
-				AWM_create_dynamic_menu($myrows[$awm_t],false);
-			} elseif ($tp=='Mixed') {
-				AWM_create_dynamic_menu($myrows[$awm_t],true);
+			for ($i=1; $i<=$revs; $i++) {
+				if ($tp=='Dynamic') {
+					AWM_create_dynamic_menu($myrows[$awm_t],false, ($i>1)?"_rm".$i:"");
+				} elseif ($tp=='Mixed') {
+					AWM_create_dynamic_menu($myrows[$awm_t],true, ($i>1)?"_rm".$i:"");
+				}
 			}
-			$awm_parentgroup = "wpgroup";
 		} elseif ($gnr=="ULLI" || $gnr=="CSS") {
 			$dyn_code = "";
 			if ($tp=='Dynamic' || $tp=='Mixed') $dyn_code = AWM_create_ULLI_dynamic_menu($myrows[$awm_t]);
@@ -722,6 +724,7 @@ function AWM_generate_linking_code() {
 				$awm_related = str_replace('\r', '', $awm_related);
 				$awm_related = trim($awm_related);
 				
+				$awm_parentgroup = "wpgroup";
 				echo "IRP=$awm_parentgroup.newItem('style=". $awm_name ."_'+(wplevel==0?'main_item_style':'sub_item_style')+';visible=0');\n";
 				echo "IRP.visible=1; IRP.text0='".$myrows[$awm_t]->related_name."'; IRP.text1='".$myrows[$awm_t]->related_name."'; IRP.text2='".$myrows[$awm_t]->related_name."';\n";
 				echo "IRP1=IRP.newGroup('style=". $awm_name ."_'+(wplevel==0?'sub_group_style':'sub_group_plus_style'));\n";

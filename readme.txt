@@ -4,7 +4,7 @@ Author: Likno Software
 Author URI: http://www.likno.com
 Plugin URI: http://www.likno.com/addins/wordpress-menu.html
 Tags: web menu, allwebmenus, drop down menu, javascript menu, dhtml menu, menu builder, navigation menu, css menu, ajax menu
-Stable Tag: 1.1.16
+Stable Tag: 1.1.17
 Requires at least: 2.3
 Tested up to: 3.5
 
@@ -64,6 +64,8 @@ For documentation, examples and screenshots, please refer to the official plugin
 
 
 == Changelog ==
+= 1.1.17 (requires AllWebMenus Build #884 or above) =
+* Supports responsive menus.
 = 1.1.16 (requires AllWebMenus Build #884 or above) =
 * Improved multiple menus support.
 = 1.1.15 (requires AllWebMenus Build #884 or above) =

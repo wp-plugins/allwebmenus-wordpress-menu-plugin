@@ -244,6 +244,14 @@ function add_genre_column() {
 	}
 }
 
+function add_revision_column() {
+	global $awm_total_tabs, $awm_table_name, $wpdb;
+	if($wpdb->get_var("show columns from $awm_table_name LIKE 'menu_revisions'")!= 'menu_revisions'){
+		$wpdb->query("ALTER TABLE ".$awm_table_name." ADD menu_revisions tinytext NOT NULL DEFAULT ''");
+		$wpdb->query("UPDATE $awm_table_name SET menu_revisions='1'");
+	}
+}
+
 /* This code creates new menu */
 function awm_create_new_menu($firstTime = false) {
 	update_option('AWM_show_welcome', FALSE);
@@ -515,18 +523,19 @@ function awm_update_zip() {
 				}
 				$struct = "";
 				$gen = "JS";
+				$revs = "1";
 				// if the zip contains the "info.txt" then read-in the genre, else set as "JS"
 				if (file_exists (ABSPATH.$folder."info.txt")) {
 					if ($awm_menuinfofile = fopen(ABSPATH.$folder."info.txt", 'r')) {
 						while($tmp = fgets($awm_menuinfofile, filesize(ABSPATH.$folder."info.txt"))) {
 							if (substr($tmp,0,7)=="Genre: ") $gen = substr($tmp,7);
 							if (trim($tmp)=="***Start Structure Code***") while (trim($tmp=fgets($awm_menuinfofile, filesize(ABSPATH.$folder."info.txt")))!="***End Structure Code***") $struct .= $tmp;
+							if (substr($tmp,0,12)=="Responsive: ") $revs = substr($tmp,12);
 						}
 					}
 				}
 				$gen = trim($gen);
-				$wpdb->query("UPDATE $awm_table_name SET menu_genre='$gen' WHERE name='$or_name'");
-				$wpdb->query("UPDATE $awm_table_name SET menu_structure='$struct' WHERE name='$or_name'");
+				$wpdb->query("UPDATE $awm_table_name SET menu_genre='$gen', menu_structure='$struct', menu_revisions='$revs' WHERE name='$or_name'");
 			} else {
 				@unlink($file['file']);
 				if ($actualPerms < $wantedPerms) @chmod ( ABSPATH.$folder , $actualPerms );

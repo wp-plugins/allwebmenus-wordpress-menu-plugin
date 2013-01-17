@@ -4,59 +4,59 @@
  */
 
 
-function AWM_create_dynamic_menu($awm_t, $awm_is_sub) {
+function AWM_create_dynamic_menu($awm_t, $awm_is_sub, $ext) {
 	$awm_ic = 1000;
-	$awm_m =$awm_t->name;
+	$awm_m =$awm_t->name.$ext;
 	if ($awm_is_sub) {
-		$awm_parentgroup = "wpgroup";
+		$awm_parentgroup = "wpgroup".$ext;
 	} else {
 		$awm_parentgroup = $awm_m;
 	}
 	echo "\n";
 	if ($awm_t->custom_menu) { // if user wants a custom menu
-		$awm_ic = AWM_create_existing_dynamic_menu($awm_t, $awm_parentgroup, $awm_ic, false, false);
+		$awm_ic = AWM_create_existing_dynamic_menu($awm_t, $awm_parentgroup, $awm_ic, false, false, $ext);
 	} else { // else use the other options
 		if ($awm_t->include_home) { // include home
 			echo $awm_parentgroup.".newItem('style=".$awm_m."_'+(wplevel==0?'main_item_style':'sub_item_style')+';itemid=".($awm_ic++).";text0=Home;".(get_bloginfo('url')!=""?"url=".get_bloginfo('url'):"")."');\n";
 		}
 		
 		if ($awm_t->pages) {
-			$awm_ic = AWM_create_dynamic_menu__pages($awm_t, $awm_parentgroup, $awm_ic, false, false);
+			$awm_ic = AWM_create_dynamic_menu__pages($awm_t, $awm_parentgroup, $awm_ic, false, false, $ext);
 		}
 		
 		if ($awm_t->posts) {
-			$awm_ic = AWM_create_dynamic_menu__posts($awm_t, $awm_parentgroup, $awm_ic, false, false);
+			$awm_ic = AWM_create_dynamic_menu__posts($awm_t, $awm_parentgroup, $awm_ic, false, false, $ext);
 		}
 		
 		if ($awm_t->categories) {
-			$awm_ic = AWM_create_dynamic_menu__categories($awm_t, $awm_parentgroup, $awm_ic, false, false);
+			$awm_ic = AWM_create_dynamic_menu__categories($awm_t, $awm_parentgroup, $awm_ic, false, false, $ext);
 		}
 	}
 }
 
 
-function AWM_create_menu_structure($awm_t) {
+function AWM_create_menu_structure($awm_t, $ext) {
 	$awm_ic = 1000;
 	$awm_xml_out = "<?xml version='1.0' encoding='UTF-8'?><mainmenu>";
 	$awm_xml_out .="<menutype>".$awm_t->type."</menutype>";
 	
 	if ($awm_t->custom_menu) { // if user wants a custom menu
-		$awm_xml_out .=  AWM_create_existing_dynamic_menu($awm_t, "", $awm_ic, true, false);
+		$awm_xml_out .=  AWM_create_existing_dynamic_menu($awm_t, "", $awm_ic, true, false, $ext);
 	} else { // else use the other options
 		if ($awm_t->include_home) { // include home
 			$awm_xml_out .= "<item><id>home0</id><name>Home</name><link>".get_bloginfo('url')."</link><submenu></submenu></item>";
 		}
 		
 		if ($awm_t->pages) {
-			$awm_xml_out .= AWM_create_dynamic_menu__pages($awm_t, "", $awm_ic, true, false);
+			$awm_xml_out .= AWM_create_dynamic_menu__pages($awm_t, "", $awm_ic, true, false, $ext);
 		}
 		
 		if ($awm_t->posts) {
-			$awm_xml_out .= AWM_create_dynamic_menu__posts($awm_t, "", $awm_ic, true, false);
+			$awm_xml_out .= AWM_create_dynamic_menu__posts($awm_t, "", $awm_ic, true, false, $ext);
 		}
 		
 		if ($awm_t->categories) {
-			$awm_xml_out .= AWM_create_dynamic_menu__categories($awm_t, "", $awm_ic, true, false);
+			$awm_xml_out .= AWM_create_dynamic_menu__categories($awm_t, "", $awm_ic, true, false, $ext);
 		}
 	}
 	$awm_xml_out .= "</mainmenu>";
@@ -67,26 +67,26 @@ function AWM_create_menu_structure($awm_t) {
 }
 
 
-function AWM_create_ULLI_dynamic_menu($awm_t) {
+function AWM_create_ULLI_dynamic_menu($awm_t, $ext) {
 	$awm_ic = 1000;
 	$awm_xml_out = "";
 	if ($awm_t->custom_menu==1) { // if user wants a custom menu
-		$awm_xml_out .=  AWM_create_existing_dynamic_menu($awm_t, "", $awm_ic, false, true);
+		$awm_xml_out .=  AWM_create_existing_dynamic_menu($awm_t, "", $awm_ic, false, true, $ext);
 	} else { // else use the other options
 		if ($awm_t->include_home) { // include home
 			$awm_xml_out .= "\t<li>\n\t\t<a href=\"".get_bloginfo('url')."\">Home</a>\n\t</li>\n";
 		}
 		
 		if ($awm_t->pages) {
-			$awm_xml_out .= AWM_create_dynamic_menu__pages($awm_t, "", $awm_ic, false, true);
+			$awm_xml_out .= AWM_create_dynamic_menu__pages($awm_t, "", $awm_ic, false, true, $ext);
 		}
 		
 		if ($awm_t->posts) {
-			$awm_xml_out .= AWM_create_dynamic_menu__posts($awm_t, "", $awm_ic, false, true);
+			$awm_xml_out .= AWM_create_dynamic_menu__posts($awm_t, "", $awm_ic, false, true, $ext);
 		}
 		
 		if ($awm_t->categories) {
-			$awm_xml_out .= AWM_create_dynamic_menu__categories($awm_t, "", $awm_ic, false, true);
+			$awm_xml_out .= AWM_create_dynamic_menu__categories($awm_t, "", $awm_ic, false, true, $ext);
 		}
 	}
 	
@@ -97,10 +97,10 @@ function AWM_create_ULLI_dynamic_menu($awm_t) {
 /* 
  * Create the categories menu
  */
-function AWM_create_dynamic_menu__categories($awm_t, $awm_parentgroup, $awm_ic, $awm_isXML, $awm_isUL) {
+function AWM_create_dynamic_menu__categories($awm_t, $awm_parentgroup, $awm_ic, $awm_isXML, $awm_isUL, $ext) {
 	global $wpdb;
 	$awm_depth = 0;
-	$awm_m =$awm_t->name;
+	$awm_m =$awm_t->name.$ext;
 	$awm_xml_out = "";
 	$awm_isNew = ($wpdb->get_results("show tables like '{$wpdb->prefix}term_taxonomy'")) > 0;
 	
@@ -141,7 +141,7 @@ function AWM_create_dynamic_menu__categories($awm_t, $awm_parentgroup, $awm_ic, 
 	
 	if ($awm_isXML) {
 		if ($awm_t->categories_ms=='sub') $awm_xml_out .= "<item><id>categories</id><name>".$awm_t->categories_name."</name><link></link><submenu>";
-		$awm_xml_out .= AWM_create_dynamic_menu__categories_step($awm_t,$awm_ic,$awm_parentgroup,$awm_cats,$awm_depth,0,$awm_recent,$awm_isXML,$awm_isUL);
+		$awm_xml_out .= AWM_create_dynamic_menu__categories_step($awm_t,$awm_ic,$awm_parentgroup,$awm_cats,$awm_depth,0,$awm_recent,$awm_isXML,$awm_isUL, $ext);
 		if ($awm_t->categories_ms=='sub') $awm_xml_out .= "</submenu></item>";
 		return $awm_xml_out;
 	} elseif ($awm_isUL) {
@@ -149,7 +149,7 @@ function AWM_create_dynamic_menu__categories($awm_t, $awm_parentgroup, $awm_ic, 
 			$tabs = ""; for ($i=0; $i<$awm_depth; $i++) $tabs .= "\t\t";
 		}
 		if ($awm_t->categories_ms=='sub') $awm_xml_out .= "$tabs\t<li>\n$tabs\t\t<a href=\"javascript:void(0);\">".$awm_t->categories_name."</a>\n$tabs\t\t<ul>\n";
-		$awm_xml_out .= AWM_create_dynamic_menu__categories_step($awm_t,$awm_ic,$awm_parentgroup,$awm_cats,$awm_depth+1,0,$awm_recent,$awm_isXML,$awm_isUL);
+		$awm_xml_out .= AWM_create_dynamic_menu__categories_step($awm_t,$awm_ic,$awm_parentgroup,$awm_cats,$awm_depth+1,0,$awm_recent,$awm_isXML,$awm_isUL, $ext);
 		if ($awm_t->categories_ms=='sub') $awm_xml_out .= "$tabs\t\t</ul>\n$tabs\t</li>\n";
 		return $awm_xml_out;
 	} else {
@@ -159,7 +159,7 @@ function AWM_create_dynamic_menu__categories($awm_t, $awm_parentgroup, $awm_ic, 
 			$awm_depth++;
 			$awm_parentgroup = "wpsubMenu0";
 		}
-		return AWM_create_dynamic_menu__categories_step($awm_t,$awm_ic,$awm_parentgroup,$awm_cats,$awm_depth,0,$awm_recent,$awm_isXML,$awm_isUL);
+		return AWM_create_dynamic_menu__categories_step($awm_t,$awm_ic,$awm_parentgroup,$awm_cats,$awm_depth,0,$awm_recent,$awm_isXML,$awm_isUL, $ext);
 	}
 }
 
@@ -168,8 +168,8 @@ function AWM_cat_has_kids($awm_id, $awm_cats) {
 	return false;
 }
 
-function AWM_create_dynamic_menu__categories_step($awm_t, $awm_ic, $awm_parentgroup, $awm_cats, $awm_depth, $awm_group, $awm_recent, $awm_isXML, $awm_isUL) {
-	$awm_m =$awm_t->name;
+function AWM_create_dynamic_menu__categories_step($awm_t, $awm_ic, $awm_parentgroup, $awm_cats, $awm_depth, $awm_group, $awm_recent, $awm_isXML, $awm_isUL, $ext) {
+	$awm_m =$awm_t->name.$ext;
 	$awm_xml_out = "";
 	if ($awm_isUL) { 
 		$tabs = ""; for ($i=0; $i<$awm_depth; $i++) $tabs .= "\t\t";
@@ -185,10 +185,10 @@ function AWM_create_dynamic_menu__categories_step($awm_t, $awm_ic, $awm_parentgr
 			}
 			if (AWM_cat_has_kids($awm_cats[$awm_i]->category_ID, $awm_cats)) {
 				if ($awm_isXML || $awm_isUL) {
-					$awm_xml_out .= AWM_create_dynamic_menu__categories_step($awm_t, $awm_ic, "wpsubMenu".$awm_depth, $awm_cats, $awm_depth+1, $awm_cats[$awm_i]->category_ID, $awm_recent, $awm_isXML, $awm_isUL);
+					$awm_xml_out .= AWM_create_dynamic_menu__categories_step($awm_t, $awm_ic, "wpsubMenu".$awm_depth, $awm_cats, $awm_depth+1, $awm_cats[$awm_i]->category_ID, $awm_recent, $awm_isXML, $awm_isUL, $ext);
 				} else {
 					echo "wpsubMenu".$awm_depth."=item".$awm_depth.".newGroup('style=".$awm_m."_'+((wplevel+$awm_depth)==0?'sub_group_style':'sub_group_plus_style')+((typeof(wphf_".$awm_m.")=='object')?((wplevel+$awm_depth)==0?wphf_".$awm_m."[0]:wphf_".$awm_m."[1]):''));\n";
-					$awm_ic = AWM_create_dynamic_menu__categories_step($awm_t, $awm_ic, "wpsubMenu".$awm_depth, $awm_cats, $awm_depth+1, $awm_cats[$awm_i]->category_ID, $awm_recent, $awm_isXML, $awm_isUL);
+					$awm_ic = AWM_create_dynamic_menu__categories_step($awm_t, $awm_ic, "wpsubMenu".$awm_depth, $awm_cats, $awm_depth+1, $awm_cats[$awm_i]->category_ID, $awm_recent, $awm_isXML, $awm_isUL, $ext);
 				}
 			} elseif ($awm_t->categories_subitems) {
 				$awm_j=$awm_counter=0;
@@ -224,9 +224,9 @@ function AWM_create_dynamic_menu__categories_step($awm_t, $awm_ic, $awm_parentgr
 /* 
  * Create the menu from existing
  */
-function AWM_create_existing_dynamic_menu($awm_t, $awm_parentgroup, $awm_ic, $awm_isXML, $awm_isUL) {
+function AWM_create_existing_dynamic_menu($awm_t, $awm_parentgroup, $awm_ic, $awm_isXML, $awm_isUL, $ext) {
 	$awm_depth = 0;
-	$awm_m = $awm_t->name;
+	$awm_m = $awm_t->name.$ext;
 	$awm_term_id = $awm_t->custom_menu_id;
 	$awm_xml_out = "";
 	$awm_recent = array();
@@ -234,7 +234,7 @@ function AWM_create_existing_dynamic_menu($awm_t, $awm_parentgroup, $awm_ic, $aw
 	$menu_items=AWM_apply_custom_menu_restrictions($menu_items,$awm_t);
 	//print_r($menu_items);
 	if ($awm_term_id==-1) {return ($awm_isXML || $awm_isUL)?"":$awm_ic;}
-	else return AWM_create_existing_dynamic_menu__step($awm_t, $awm_ic, $awm_parentgroup, $menu_items, $awm_depth, 0, $awm_recent, $awm_isXML, $awm_isUL);
+	else return AWM_create_existing_dynamic_menu__step($awm_t, $awm_ic, $awm_parentgroup, $menu_items, $awm_depth, 0, $awm_recent, $awm_isXML, $awm_isUL, $ext);
 }
 
 function AWM_existing_has_kids($awm_id, $menu_items) {
@@ -243,8 +243,8 @@ function AWM_existing_has_kids($awm_id, $menu_items) {
 }
 
 
-function AWM_create_existing_dynamic_menu__step($awm_t, $awm_ic, $awm_parentgroup, $menu_items, $awm_depth, $awm_group, $awm_recent, $awm_isXML, $awm_isUL) {
-	$awm_m = $awm_t->name;
+function AWM_create_existing_dynamic_menu__step($awm_t, $awm_ic, $awm_parentgroup, $menu_items, $awm_depth, $awm_group, $awm_recent, $awm_isXML, $awm_isUL, $ext) {
+	$awm_m = $awm_t->name.$ext;
 	$awm_xml_out = "";
 	if ($awm_isUL) { 
 		$tabs = ""; for ($i=0; $i<$awm_depth; $i++) $tabs .= "\t\t";
@@ -261,11 +261,11 @@ function AWM_create_existing_dynamic_menu__step($awm_t, $awm_ic, $awm_parentgrou
 			if (AWM_existing_has_kids($menu_items[$awm_i]->ID, $menu_items)) {
 				if ($awm_isXML || $awm_isUL) {
 					if ($awm_isUL) $awm_xml_out .= "$tabs\t\t<ul>\n";
-					$awm_xml_out .= AWM_create_existing_dynamic_menu__step($awm_t, $awm_ic, "wpsubMenu".$awm_depth, $menu_items, $awm_depth+1, $menu_items[$awm_i]->ID, $awm_recent, $awm_isXML, $awm_isUL);
+					$awm_xml_out .= AWM_create_existing_dynamic_menu__step($awm_t, $awm_ic, "wpsubMenu".$awm_depth, $menu_items, $awm_depth+1, $menu_items[$awm_i]->ID, $awm_recent, $awm_isXML, $awm_isUL, $ext);
 					if ($awm_isUL) $awm_xml_out .= "$tabs\t\t</ul>\n";
 				} else {
 					echo "wpsubMenu".$awm_depth."=item".$awm_depth.".newGroup('style=".$awm_m."_'+((wplevel+$awm_depth)==0?'sub_group_style':'sub_group_plus_style')+((typeof(wphf_".$awm_m.")=='object')?((wplevel+$awm_depth)==0?wphf_".$awm_m."[0]:wphf_".$awm_m."[1]):''));\n";
-					$awm_ic = AWM_create_existing_dynamic_menu__step($awm_t, $awm_ic, "wpsubMenu".$awm_depth, $menu_items, $awm_depth+1, $menu_items[$awm_i]->ID, $awm_recent, $awm_isXML, $awm_isUL);
+					$awm_ic = AWM_create_existing_dynamic_menu__step($awm_t, $awm_ic, "wpsubMenu".$awm_depth, $menu_items, $awm_depth+1, $menu_items[$awm_i]->ID, $awm_recent, $awm_isXML, $awm_isUL, $ext);
 				}
 			}
 			if ($awm_isXML) $awm_xml_out .= "</submenu></item>";
@@ -280,9 +280,9 @@ function AWM_create_existing_dynamic_menu__step($awm_t, $awm_ic, $awm_parentgrou
 /* 
  * Create the posts menu
  */
-function AWM_create_dynamic_menu__posts($awm_t, $awm_parentgroup, $awm_ic, $awm_isXML, $awm_isUL) {
+function AWM_create_dynamic_menu__posts($awm_t, $awm_parentgroup, $awm_ic, $awm_isXML, $awm_isUL, $ext) {
 	$awm_depth = 0;
-	$awm_m = $awm_t->name;;
+	$awm_m = $awm_t->name.$ext;
 	$awm_xml_out = "";
 	global $wpdb;
 	
@@ -331,9 +331,9 @@ function AWM_create_dynamic_menu__posts($awm_t, $awm_parentgroup, $awm_ic, $awm_
 	else return $awm_ic;
 }
 
-function AWM_create_dynamic_menu__pages($awm_t, $awm_parentgroup, $awm_ic, $awm_isXML, $awm_isUL) {
+function AWM_create_dynamic_menu__pages($awm_t, $awm_parentgroup, $awm_ic, $awm_isXML, $awm_isUL, $ext) {
 	$awm_depth = 0;
-	$awm_m = $awm_t->name;
+	$awm_m = $awm_t->name.$ext;
 	$awm_xml_out = "";
 	global $wpdb;
         $awm_recent = array();
@@ -358,12 +358,12 @@ function AWM_create_dynamic_menu__pages($awm_t, $awm_parentgroup, $awm_ic, $awm_
 	
 	if ($awm_isXML) {
 		if ($awm_t->pages_ms == 'sub') $awm_xml_out .= "<item><id>pages</id><name>".$awm_t->pages_name."</name><link></link><submenu>";
-		$awm_xml_out .= AWM_create_dynamic_menu__pages_step($awm_t, $awm_ic, $awm_parentgroup, $awm_pages, $awm_depth, 0, $awm_recent, $awm_isXML, $awm_isUL);
+		$awm_xml_out .= AWM_create_dynamic_menu__pages_step($awm_t, $awm_ic, $awm_parentgroup, $awm_pages, $awm_depth, 0, $awm_recent, $awm_isXML, $awm_isUL, $ext);
 		if ($awm_t->pages_ms == 'sub') $awm_xml_out .= "</submenu></item>";
 		return $awm_xml_out;
 	} elseif ($awm_isUL) {
 		if ($awm_t->pages_ms == 'sub') $awm_xml_out .= "\t<li>\n\t\t<a href=\"javascript:void(0);\">".$awm_t->pages_name."</a>\n";
-		$awm_xml_out .= AWM_create_dynamic_menu__pages_step($awm_t, $awm_ic, $awm_parentgroup, $awm_pages, $awm_depth, 0, $awm_recent, $awm_isXML, $awm_isUL);
+		$awm_xml_out .= AWM_create_dynamic_menu__pages_step($awm_t, $awm_ic, $awm_parentgroup, $awm_pages, $awm_depth, 0, $awm_recent, $awm_isXML, $awm_isUL, $ext);
 		if ($awm_t->pages_ms == 'sub') $awm_xml_out .= "\t</li>\n";
 		return $awm_xml_out;
 	} else {
@@ -373,7 +373,7 @@ function AWM_create_dynamic_menu__pages($awm_t, $awm_parentgroup, $awm_ic, $awm_
 			$awm_depth++;
 			$awm_parentgroup = "wpsubMenu0";
 		}
-		return AWM_create_dynamic_menu__pages_step($awm_t, $awm_ic, $awm_parentgroup, $awm_pages, $awm_depth, 0, $awm_recent, $awm_isXML, $awm_isUL);
+		return AWM_create_dynamic_menu__pages_step($awm_t, $awm_ic, $awm_parentgroup, $awm_pages, $awm_depth, 0, $awm_recent, $awm_isXML, $awm_isUL, $ext);
 	}
 }
 
@@ -383,8 +383,8 @@ function AWM_page_has_kids($awm_id, $awm_pages) {
 }
 
 
-function AWM_create_dynamic_menu__pages_step($awm_t, $awm_ic, $awm_parentgroup, $awm_pages, $awm_depth, $awm_group, $awm_recent, $awm_isXML, $awm_isUL) {
-	$awm_m = $awm_t->name;
+function AWM_create_dynamic_menu__pages_step($awm_t, $awm_ic, $awm_parentgroup, $awm_pages, $awm_depth, $awm_group, $awm_recent, $awm_isXML, $awm_isUL, $ext) {
+	$awm_m = $awm_t->name.$ext;
 	$awm_xml_out = "";
 	if ($awm_isUL) { 
 		$tabs = ""; for ($i=0; $i<$awm_depth; $i++) $tabs .= "\t\t";
@@ -401,11 +401,11 @@ function AWM_create_dynamic_menu__pages_step($awm_t, $awm_ic, $awm_parentgroup, 
 			if (AWM_page_has_kids($awm_pages[$awm_i]->ID, $awm_pages)) {
 				if ($awm_isXML || $awm_isUL) {
 					if ($awm_isUL) $awm_xml_out .= "$tabs\t\t<ul>\n";
-					$awm_xml_out .= AWM_create_dynamic_menu__pages_step($awm_t, $awm_ic, "wpsubMenu".$awm_depth, $awm_pages, $awm_depth+1, $awm_pages[$awm_i]->ID, $awm_recent, $awm_isXML, $awm_isUL);
+					$awm_xml_out .= AWM_create_dynamic_menu__pages_step($awm_t, $awm_ic, "wpsubMenu".$awm_depth, $awm_pages, $awm_depth+1, $awm_pages[$awm_i]->ID, $awm_recent, $awm_isXML, $awm_isUL, $ext);
 					if ($awm_isUL) $awm_xml_out .= "$tabs\t\t</ul>\n";
 				} else {
 					echo "\n\nwpsubMenu".$awm_depth."=item".$awm_depth.".newGroup('style=".$awm_m."_'+((wplevel+$awm_depth)==0?'sub_group_style':'sub_group_plus_style')+((typeof(wphf_".$awm_m.")=='object')?((wplevel+$awm_depth)==0?wphf_".$awm_m."[0]:wphf_".$awm_m."[1]):''));\n\n\n";
-					$awm_ic = AWM_create_dynamic_menu__pages_step($awm_t, $awm_ic, "wpsubMenu".$awm_depth, $awm_pages, $awm_depth+1, $awm_pages[$awm_i]->ID, $awm_recent, $awm_isXML, $awm_isUL);
+					$awm_ic = AWM_create_dynamic_menu__pages_step($awm_t, $awm_ic, "wpsubMenu".$awm_depth, $awm_pages, $awm_depth+1, $awm_pages[$awm_i]->ID, $awm_recent, $awm_isXML, $awm_isUL, $ext);
 				}
 			}
 			if ($awm_isXML) $awm_xml_out .= "</submenu></item>";
