@@ -3,7 +3,7 @@
 Plugin Name: AllWebMenus WordPress Menu Plugin
 Plugin URI: http://www.likno.com/addins/wordpress-menu.html
 Description: WordPress plugin for the AllWebMenus PRO Javascript Menu Maker - Create stylish drop-down menus or sliding menus for your blogs!
-Version: 1.1.18
+Version: 1.1.19
 Author: Likno Software
 Author URI: http://www.likno.com/ 
 */
@@ -65,7 +65,7 @@ function AWM_init_hook(){
 	
 	$this->awm_table_name = $awm_table_name = $this->wpdb->prefix . "awm";
 	$this->dataArray = $dataArray = array();
-	$this->AWM_ver = $AWM_ver = '1.1.18';
+	$this->AWM_ver = $AWM_ver = '1.1.19';
 	
 	$this->awm_total_tabs = $awm_total_tabs = get_option("AWM_total_menus",(int) 0);
 	//if ($_POST["AWM_selected_tab"]=="") $_POST["AWM_selected_tab"]="1";
@@ -173,7 +173,7 @@ function AWM_options_page() {
 	<br>
 	<h2>AllWebMenus WordPress Menu Plugin v<?php echo $this->AWM_ver; ?></h2>
 	<div id="AWM_welcome_title" onclick="awm_show_welcome();" style="cursor: pointer;">
-		Note: The plugin requires the use of the "AllWebMenus" commercial application (version 5.3.884+). <span id="AWM_welcome_title_info"><a href="javascript:void(0);">Click for more info.</a></span>
+		Note: The plugin requires the use of the "AllWebMenus" commercial application (version 5.3.926+). <span id="AWM_welcome_title_info"><a href="javascript:void(0);">Click for more info.</a></span>
 	</div>
 		<p id="awm_upload_anchor">For information and updates, please visit:
 		<a href="http://www.likno.com/addins/wordpress-menu.html">http://www.likno.com/addins/wordpress-menu.html</a></p>	
@@ -273,7 +273,7 @@ content, etc. </em> </p>
 					<i>&nbsp;&nbsp;(if you use the &lt;"Static" Menu Type&gt; option, you may also change the menu structure & content using the Menu Editor)</i>
 					<br><br>- <b>Compile</b> your menu using the<span style="background-color:#FFFFE0; font-weight:bold; padding:0px 5px;"><i>"Add-ins &nbsp;&gt;&nbsp; WordPress Menu &nbsp;&gt;&nbsp; Compile WordPress Menu"</i></span> form
 					<br><br>- Your <b>compiled menu ZIP file</b> will be created. Now proceed to "Step 2" below to upload this ZIP file to your blog.<br>
-					<i>&nbsp;&nbsp;Note: AllWebMenus version 5.3.884 (December 2011) or above is required</i>
+					<i>&nbsp;&nbsp;Note: AllWebMenus version 5.3.926 (December 2013) or above is required</i>
 				</td></tr>
 				</td></tr>
 			</table>
