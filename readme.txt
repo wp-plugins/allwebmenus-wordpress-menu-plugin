@@ -4,12 +4,12 @@ Author: Likno Software
 Author URI: http://www.likno.com
 Plugin URI: http://www.likno.com/addins/wordpress-menu.html
 Tags: web menu, allwebmenus, drop down menu, javascript menu, dhtml menu, menu builder, navigation menu, css menu, ajax menu, responsive menu
-Stable Tag: 1.1.20
+Stable Tag: 1.1.21
 Requires at least: 2.3
 Tested up to: 3.9
 
 
-Required commercial (paid) software: AllWebMenus PRO (v5.3.926)
+Requires commercial (paid) software: AllWebMenus PRO (v5.3.926)
 
 
 == Description ==
@@ -67,6 +67,8 @@ For documentation, examples and screenshots, please refer to the official plugin
 
 
 == Changelog ==
+= 1.1.21 (requires AllWebMenus Build #926 or above) =
+* Supports the "Genesis Framework" (the menu is now linked to the posts/pages automatically, without any custom hook required).
 = 1.1.20 (requires AllWebMenus Build #926 or above) =
 * Improves the sessions usage on servers where certain permissions are not granted.
 = 1.1.19 (requires AllWebMenus Build #926 or above) =

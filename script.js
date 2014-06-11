@@ -48,7 +48,7 @@ function upload_zip() {
 		theform1a.AWM_menu_id.value = eval('theform.AWM_menu_id_'+theform.AWM_selected_tab.value + '.value');theform1a.AWM_selected_tab_c.value=theform.AWM_selected_tab.value;theform1a.submit();
 	} else {
         if (tmp=='') alert ("You have not selected the ZIP file yet. Please browse for it first.");
-        else alert("Wrong filename! The filename should be '"+document.getElementById('correct_filename').innerHTML+"' and it now is '"+tmp+"'.");
+        else alert("Wrong filename! The filename should be '"+document.getElementById('correct_filename').innerHTML+"' while now it is '"+tmp+"'.");
 	}
 }
 function awm_show_tab(x) {

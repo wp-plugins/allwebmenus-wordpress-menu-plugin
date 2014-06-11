@@ -18,11 +18,24 @@ function awm_add_code(){
 		}
 	}
 	if (substr_count($file,'AWM_generate_linking_code')==0) {
+        // genesis_markup case
+        if (substr_count($file,'genesis_markup')!=0) {
+            $file = str_replace("do_action( 'genesis_before' );", "if (function_exists('AWM_generate_linking_code'))AWM_generate_linking_code();\ndo_action( 'genesis_before' );", $file);
+        }
+        // generic case
+        else
+        {
 		preg_match ( "/<body([^\?>])*(<\?([^>])*\?>([^>\?])*)*>/", $file, $matches );
 		if (count($matches)>0) {
 			$pieces = explode($matches[0],$file);
 			if (count($pieces) == 2) {
 				$file =$pieces[0].$matches[0]."\n<?php if (function_exists('AWM_generate_linking_code'))AWM_generate_linking_code(); ?>".$pieces[1];
+			}
+		} else {
+			if ($actualPerms < $wantedPerms) @chmod ( $file_path , $actualPerms );
+            return false;
+        }
+    }
 				$fp = fopen($file_path, 'w');
 				if (!$fp) {
 					if ($actualPerms < $wantedPerms) @chmod ( $file_path , $actualPerms );
@@ -33,11 +46,6 @@ function awm_add_code(){
 				if ($actualPerms < $wantedPerms) @chmod ( $file_path , $actualPerms );
 			   return true;
 			}
-		} else {
-			if ($actualPerms < $wantedPerms) @chmod ( $file_path , $actualPerms );
-            return false;
-        }
-	}
 	if ($actualPerms < $wantedPerms) @chmod ( $file_path , $actualPerms );
 	return true;
 }
@@ -235,7 +243,7 @@ function awm_convert_to_database() {
 	return "";
 }
 
-function add_genre_column() {
+function awm_add_genre_column() {
 	global $awm_total_tabs, $awm_table_name, $wpdb;
 	if($wpdb->get_var("show columns from $awm_table_name LIKE 'menu_genre'")!= 'menu_genre'){
 		$wpdb->query("ALTER TABLE ".$awm_table_name." ADD menu_genre tinytext NOT NULL DEFAULT ''");
@@ -244,7 +252,7 @@ function add_genre_column() {
 	}
 }
 
-function add_revision_column() {
+function awm_add_revision_column() {
 	global $awm_total_tabs, $awm_table_name, $wpdb;
 	if($wpdb->get_var("show columns from $awm_table_name LIKE 'menu_revisions'")!= 'menu_revisions'){
 		$wpdb->query("ALTER TABLE ".$awm_table_name." ADD menu_revisions tinytext NOT NULL DEFAULT ''");

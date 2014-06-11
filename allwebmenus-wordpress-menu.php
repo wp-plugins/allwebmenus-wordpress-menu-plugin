@@ -3,7 +3,7 @@
 Plugin Name: AllWebMenus WordPress Menu Plugin
 Plugin URI: http://www.likno.com/addins/wordpress-menu.html
 Description: WordPress plugin for the AllWebMenus PRO Javascript Menu Maker - Create stylish drop-down menus or sliding menus for your blogs!
-Version: 1.1.20
+Version: 1.1.21
 Author: Likno Software
 Author URI: http://www.likno.com/ 
 */
@@ -67,7 +67,7 @@ function AWM_init_hook(){
 	
 	$this->awm_table_name = $awm_table_name = $this->wpdb->prefix . "awm";
 	$this->dataArray = $dataArray = array();
-	$this->AWM_ver = $AWM_ver = '1.1.20';
+	$this->AWM_ver = $AWM_ver = '1.1.21';
 	
 	$this->awm_total_tabs = $awm_total_tabs = get_option("AWM_total_menus",(int) 0);
 	//if ($_POST["AWM_selected_tab"]=="") $_POST["AWM_selected_tab"]="1";
@@ -97,8 +97,8 @@ function AWM_init_hook(){
 	$this->databaseMessage  = awm_convert_to_database();
 	if (!empty($this->databaseMessage))
 		$this->databaseMessage = "<div class=\"updated fade\" style=\"margin-top: 20px;\"><strong>".$this->databaseMessage."</strong></div>";
-	add_genre_column();
-	add_revision_column();
+	awm_add_genre_column();
+	awm_add_revision_column();
 	
 	$this->awm_total_tabs = $awm_total_tabs;
 	$this->awm_is_yarpp_enabled = $awm_is_yarpp_enabled = in_array('yet-another-related-posts-plugin/yarpp.php', get_option('active_plugins'));
@@ -283,7 +283,7 @@ content, etc. </em> </p>
 	
 	<table id="uploader">
 
-		<tr><td width="250"><strong>Browse for the "<span id='correct_filename'>awm<?php echo $myrows[get_option('AWM_selected_tab')]->name;?>.zip</span></i>" file:</strong></td>
+		<tr><td width="250"><strong>Browse for the "<span id='correct_filename'>awm<?php echo $myrows[get_option('AWM_selected_tab')]->name;?>.zip</span>" file:</strong></td>
 		<td>
         <form method="post" enctype="multipart/form-data" id="theform1a" name="theform1a" action="<?php echo plugins_url('actions.php',__FILE__); ?>" >
 			<?php $nonce= wp_create_nonce('my-nonce'); ?>
